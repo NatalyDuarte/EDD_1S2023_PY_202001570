@@ -1,15 +1,21 @@
 package EstructListaDob
 
 import (
-	"fmt"
-
+	"Fase1/EstructPila"
 	"Fase1/Usuarios"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"log"
 )
+
+var arch, arch1, arch2, archjunto string
 
 // Aqui encontramos el nodo
 type NodoD struct {
 	Siguiente *NodoD
 	Atras     *NodoD
+	Pilita    *EstructPila.Pil
 	Persona   *Usuarios.Usuario
 }
 
@@ -21,7 +27,7 @@ type ListaDobl struct {
 }
 
 func NuevoNodoDob(usu *Usuarios.Usuario) *NodoD {
-	return &NodoD{nil, nil, usu}
+	return &NodoD{nil, nil, &EstructPila.Pil{}, usu}
 }
 func (listat *ListaDobl) InsertarDob(usu *Usuarios.Usuario) {
 	//Declarar nuevo nodo
@@ -40,7 +46,50 @@ func (listat *ListaDobl) InsertarDob(usu *Usuarios.Usuario) {
 		listat.Ultimo = nuevis
 		listat.Contador += 1
 	}
-	fmt.Println("Usuario ingresado correctamente a la lista enlazada doble")
+}
+
+func (listat *ListaDobl) InsertarPila(nombre string, usu *Usuarios.Bita) {
+	auxLis := listat.Primero
+	if listat.Primero != nil {
+		for auxLis != nil {
+			if auxLis.Persona.Nombre == nombre {
+				auxLis.Pilita.Insertar(usu)
+			}
+			auxLis = auxLis.Siguiente
+		}
+	} else {
+		fmt.Println(" La lista doble se encuentra Vacia ")
+	}
+}
+
+func (listat *ListaDobl) ImprimirPila(nombre string) {
+	auxLis := listat.Primero
+	if listat.Primero != nil {
+		for auxLis != nil {
+			if auxLis.Persona.Nombre == nombre {
+				auxLis.Pilita.Imprimir()
+			}
+			auxLis = auxLis.Siguiente
+		}
+	} else {
+		fmt.Println(" La lista doble se encuentra Vacia ")
+	}
+}
+
+func (listat *ListaDobl) ObtNombre(nombre string) *NodoD {
+	aux := listat.Primero
+	if listat.Primero != nil {
+		for aux != nil {
+			if aux.Persona.Nombre == nombre {
+				return aux
+			}
+			aux = aux.Siguiente
+		}
+		return nil
+	} else {
+		fmt.Println(" La lista doble se encuentra Vacia ")
+	}
+	return nil
 }
 
 // Metodo para imprimir la lista
@@ -49,8 +98,10 @@ func (listat *ListaDobl) Imprimir() {
 	if listat.Primero != nil {
 		listat.Ordenamiento()
 		for actual != nil {
-			fmt.Println("Nombre: ", actual.Persona.Nombre, " ", actual.Persona.Apellido, " , Carnet: ", actual.Persona.Carnet)
-			fmt.Println("=======================================================")
+			if actual.Persona.Nombre != "admin" {
+				fmt.Println("Nombre: ", actual.Persona.Nombre, " ", actual.Persona.Apellido, " , Carnet: ", actual.Persona.Carnet)
+				fmt.Println("=======================================================")
+			}
 			actual = actual.Siguiente
 		}
 	} else {
@@ -77,4 +128,76 @@ func (listat *ListaDobl) Ordenamiento() {
 			i = i.Siguiente
 		}
 	}
+}
+
+// Metodo para verificar si es un usuario
+func (listat *ListaDobl) Verificar(nombre string, passw string) string {
+	var nom string
+	var encontrado bool = false
+	comprobar := listat.Primero
+	if listat.Primero != nil {
+		for comprobar != nil && encontrado != true {
+			if comprobar.Persona.Nombre == nombre {
+				nom = nombre
+				encontrado = true
+			}
+			comprobar = comprobar.Siguiente
+		}
+		if !encontrado {
+			nom = "None"
+		}
+
+	} else {
+		nom = "None"
+	}
+	return nom
+}
+
+// Reporte Json
+func (listat *ListaDobl) ReporteJs() {
+	actual := listat.Primero
+	if listat.Primero != nil {
+		listat.Ordenamiento()
+		for actual != nil {
+			if actual.Siguiente == nil {
+				prubjs := Usuarios.Usuario{
+					Nombre:       actual.Persona.Nombre,
+					Apellido:     actual.Persona.Apellido,
+					Carnet:       actual.Persona.Carnet,
+					Password:     actual.Persona.Password,
+					Carpeta_Raiz: "/",
+				}
+				dat, err := json.Marshal(prubjs)
+				if err != nil {
+					log.Fatal(err)
+				}
+				arch += string(dat) + "\n"
+			} else {
+				prubjs := Usuarios.Usuario{
+					Nombre:       actual.Persona.Nombre,
+					Apellido:     actual.Persona.Apellido,
+					Carnet:       actual.Persona.Carnet,
+					Password:     actual.Persona.Password,
+					Carpeta_Raiz: "/",
+				}
+				dat, err := json.Marshal(prubjs)
+				if err != nil {
+					log.Fatal(err)
+				}
+				arch += string(dat) + ",\n"
+			}
+			actual = actual.Siguiente
+		}
+		arch1 = "{\n \"alumnos\":[\n"
+		arch2 = "]\n}"
+		archjunto = arch1 + arch + arch2
+		err := ioutil.WriteFile("ReporteJSON.json", []byte(archjunto), 0644)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println("Se genero reporte correctamente")
+	} else {
+		fmt.Println(" La lista doble se encuentra Vacia ")
+	}
+
 }

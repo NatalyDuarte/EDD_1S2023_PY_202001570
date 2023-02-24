@@ -3,6 +3,7 @@ package EstructCola
 import (
 	"Fase1/Usuarios"
 	"fmt"
+	"strconv"
 )
 
 // Aqui encontramos el nodo
@@ -35,7 +36,6 @@ func (colita *Col) Insertar(usu *Usuarios.Usuario) int {
 		aux.Siguiente = nuevis
 	}
 	colita.Contador += 1
-	fmt.Println("Usuario ingresado correctamente")
 	return colita.Contador
 }
 
@@ -47,7 +47,6 @@ func (colita *Col) Eliminar(usu *Usuarios.Usuario) {
 	if colita.Primero != nil {
 		for actual != nil && encontrado != true {
 			if actual.Persona.Nombre == usu.Nombre {
-				fmt.Println(" Nodo con el dato ( ", usu.Nombre, " ) Encontrado")
 				if actual == colita.Primero {
 					colita.Primero = colita.Primero.Siguiente
 				} else if actual == colita.Ultimo {
@@ -56,7 +55,6 @@ func (colita *Col) Eliminar(usu *Usuarios.Usuario) {
 				} else {
 					anterior.Siguiente = actual.Siguiente
 				}
-				fmt.Println("Nodo Eliminado")
 				colita.Contador -= 1
 				encontrado = true
 			}
@@ -69,4 +67,24 @@ func (colita *Col) Eliminar(usu *Usuarios.Usuario) {
 	} else {
 		fmt.Println(" La cola se encuentra Vacia ")
 	}
+}
+
+// graficar cola
+func (colita *Col) Graficar() string {
+	var cont int
+	aux := colita.Primero
+	var cadena string
+	for aux != nil {
+		cadena += "nodo" + strconv.Itoa(cont) + "[label= <<table  cellborder= \"0\" cellspacing=\"0\"><tr><td align=\"left\"><b>Carnet: &nbsp;</b> " + strconv.Itoa(aux.Persona.Carnet) + "</td></tr>" + "<tr><td align=\"left\"><b>Nombre: &nbsp;</b> " + aux.Persona.Nombre + " " + aux.Persona.Apellido + "</td></tr></table>>];\n"
+		if aux.Siguiente != nil {
+			cadena += "nodo" + strconv.Itoa(cont+1) + " -> nodo" + strconv.Itoa(cont) + ";\n"
+		}
+		aux = aux.Siguiente
+		cont = cont + 1
+	}
+
+	return "digraph G{\nbgcolor = \"none\"\nlabel=\"COLA\"\nnode [shape=plaintext fontname=\"Sans serif\" fontsize=\"8\", color=black, style=filled fillcolor=cadetblue1];\n" +
+		"rankdir=LR;\n" +
+		cadena +
+		"\n}"
 }

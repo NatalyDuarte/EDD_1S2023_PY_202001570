@@ -6,18 +6,22 @@ import (
 	"Fase1/Usuarios"
 	"bufio"
 	"fmt"
+
+	//"log"
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // declarando variables globales
-var usuario, password string
 var colota = EstructCola.Col{}
 var listadob = EstructListaDob.ListaDobl{}
 
 // corriendo el proyecto
 func main() {
+	var usuari *Usuarios.Usuario = Usuarios.NuevoEstudiante("admin", "admin", 0, "admin", "/")
+	listadob.InsertarDob(usuari)
 	MenuPrincipal()
 
 }
@@ -45,6 +49,8 @@ func MenuPrincipal() {
 
 // Menu de inicio de sesion
 func MenuInicio() {
+	var usuario, password string
+	var respu string
 	fmt.Println("Ingrese su Usuario: ")
 	fmt.Scanln(&usuario)
 	fmt.Println("Ingrese su Password: ")
@@ -53,8 +59,19 @@ func MenuInicio() {
 		fmt.Println("Se inicio correctamente")
 		MenuAdmin()
 	} else {
-
+		fmt.Println(usuario)
+		respu = listadob.Verificar(usuario, password)
+		if respu != "None" {
+			InicioUsuario(respu)
+		}
 	}
+}
+
+// Menu de Usuario
+func InicioUsuario(respu string) {
+	fmt.Println("====================Bienvenido: ", respu, "====================")
+	GuardarPila(respu, "Inicio Sesión")
+	listadob.ImprimirPila(respu)
 }
 
 // Menu de Administrador
@@ -71,16 +88,30 @@ func MenuAdmin() {
 		fmt.Println("Elige una opcion: ")
 		fmt.Scanln(&opc)
 		if opc == 1 {
+			/*path, err := os.Getwd()
+			if err != nil {
+				log.Println(err)
+			}*/
+			// Escribir el archivo .dot
+			//Dot.WriteDotFile(colota.Graficar(), "grafcola.dot", path)
+			// Ejecutar COmando en consola
+			//Dot.GeneratePNG("grafcola.dot", path)
+			GuardarPila("admin", "Vio estudiantes pendientes")
 			fmt.Println("=================Estudiantes pendientes:===============")
 			Imprimir()
 		} else if opc == 2 {
+			GuardarPila("admin", "Vio estudiantes del sistema")
+			listadob.ReporteJs()
 			fmt.Println("=================Listado de Estudiantes:===============")
 			listadob.Imprimir()
 		} else if opc == 3 {
+			GuardarPila("admin", "Registro Nuevo estudiante")
 			RegistroUsuario()
 		} else if opc == 4 {
+			GuardarPila("admin", "Realizo Carga Masiva")
 			CargaMasiva()
 		} else if opc == 5 {
+			GuardarPila("admin", "Cerro Sesion")
 			fmt.Println("Cerrando Sesion........")
 			break
 		} else {
@@ -102,7 +133,8 @@ func RegistroUsuario() {
 	fmt.Scanln(&carnet)
 	fmt.Println("Ingrese la Contraseña: ")
 	fmt.Scanln(&contrase)
-	var usuari *Usuarios.Usuario = Usuarios.NuevoEstudiante(nombre, apellido, carnet, contrase)
+	carpe := "/"
+	var usuari *Usuarios.Usuario = Usuarios.NuevoEstudiante(nombre, apellido, carnet, contrase, carpe)
 	numpend = colota.Insertar(usuari)
 	for {
 		fmt.Println("*************Pendientes: ", numpend, " ***************")
@@ -113,11 +145,13 @@ func RegistroUsuario() {
 		fmt.Print("Elige una opcion: ")
 		fmt.Scanln(&opcio)
 		if opcio == 1 {
+			GuardarPila("admin", "Acepto estudiante")
 			listadob.InsertarDob(usuari)
 			colota.Eliminar(usuari)
 			fmt.Println("Aceptado")
 			break
 		} else if opcio == 2 {
+			GuardarPila("admin", "Rechazo estudiante")
 			fmt.Println("Se rechazo")
 			break
 		} else if opcio == 3 {
@@ -140,10 +174,12 @@ func Imprimir() {
 			fmt.Print("Elige una opcion: ")
 			fmt.Scanln(&opcio)
 			if opcio == 1 {
+				GuardarPila("admin", "Acepto estudiante")
 				listadob.InsertarDob(actual.Persona)
 				colota.Eliminar(actual.Persona)
 				fmt.Println("Aceptado")
 			} else if opcio == 2 {
+				GuardarPila("admin", "Rechazo estudiante")
 				fmt.Println("Se rechazo")
 			} else if opcio == 3 {
 				fmt.Println("Regresando....")
@@ -189,7 +225,8 @@ func CargaMasiva() {
 				if err1 != nil {
 					fmt.Println("Error en la conversion")
 				}
-				var usuari1 *Usuarios.Usuario = Usuarios.NuevoEstudiante(nombre, apellido, carntc, passw)
+				carpe := "/"
+				var usuari1 *Usuarios.Usuario = Usuarios.NuevoEstudiante(nombre, apellido, carntc, passw, carpe)
 				colota.Insertar(usuari1)
 			}
 			contador += 1
@@ -197,4 +234,14 @@ func CargaMasiva() {
 		fmt.Println("Carga Masiva se cargo exitosamente")
 
 	}
+}
+
+func GuardarPila(nombre string, actividad string) {
+	var fecha, hora string
+	ini := time.Now()
+	month := int(ini.Month())
+	fecha = strconv.Itoa(ini.Day()) + "/" + strconv.Itoa(month) + "/" + strconv.Itoa(ini.Year())
+	hora = strconv.Itoa(ini.Hour()) + ":" + strconv.Itoa(ini.Minute())
+	var pilan *Usuarios.Bita = Usuarios.NuevoBita(actividad, fecha, hora)
+	listadob.InsertarPila(nombre, pilan)
 }
