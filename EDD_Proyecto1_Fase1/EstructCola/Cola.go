@@ -1,6 +1,7 @@
 package EstructCola
 
 import (
+	"Fase1/Dot"
 	"Fase1/Usuarios"
 	"fmt"
 	"strconv"
@@ -70,9 +71,12 @@ func (colita *Col) Eliminar(usu *Usuarios.Usuario) {
 }
 
 // graficar cola
-func (colita *Col) Graficar() string {
+func (colita *Col) Graficar() {
 	var cont int
+	var contenido string
 	aux := colita.Primero
+	nombrearch := "./grafcola.dot"
+	nombreimage := "grafcola.png"
 	var cadena string
 	for aux != nil {
 		cadena += "nodo" + strconv.Itoa(cont) + "[label= <<table  cellborder= \"0\" cellspacing=\"0\"><tr><td align=\"left\"><b>Carnet: &nbsp;</b> " + strconv.Itoa(aux.Persona.Carnet) + "</td></tr>" + "<tr><td align=\"left\"><b>Nombre: &nbsp;</b> " + aux.Persona.Nombre + " " + aux.Persona.Apellido + "</td></tr></table>>];\n"
@@ -83,8 +87,11 @@ func (colita *Col) Graficar() string {
 		cont = cont + 1
 	}
 
-	return "digraph G{\nbgcolor = \"none\"\nlabel=\"COLA\"\nnode [shape=plaintext fontname=\"Sans serif\" fontsize=\"8\", color=black, style=filled fillcolor=cadetblue1];\n" +
+	contenido = "digraph G{\nbgcolor = \"none\"\nlabel=\"COLA\"\nnode [shape=plaintext fontname=\"Sans serif\" fontsize=\"8\", color=black, style=filled fillcolor=cadetblue1];\n" +
 		"rankdir=LR;\n" +
 		cadena +
 		"\n}"
+	Dot.CrearArchivo(nombrearch)
+	Dot.EscribirArchivoDot(contenido, nombrearch)
+	Dot.Ejecutar(nombreimage, nombrearch)
 }

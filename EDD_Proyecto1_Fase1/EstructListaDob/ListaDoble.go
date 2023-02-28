@@ -1,12 +1,14 @@
 package EstructListaDob
 
 import (
+	"Fase1/Dot"
 	"Fase1/EstructPila"
 	"Fase1/Usuarios"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
+	"strconv"
 )
 
 var arch, arch1, arch2, archjunto string
@@ -48,6 +50,20 @@ func (listat *ListaDobl) InsertarDob(usu *Usuarios.Usuario) {
 	}
 }
 
+func (listat *ListaDobl) BuscarNodo(carnt int) bool {
+	actual := listat.Primero
+	var encontrado = false
+	if listat.Primero != nil {
+		for actual != nil && encontrado != true {
+			if actual.Persona.Carnet == carnt {
+				encontrado = true
+			}
+			actual = actual.Siguiente
+		}
+	}
+	return encontrado
+}
+
 func (listat *ListaDobl) InsertarPila(nombre string, usu *Usuarios.Bita) {
 	auxLis := listat.Primero
 	if listat.Primero != nil {
@@ -58,7 +74,7 @@ func (listat *ListaDobl) InsertarPila(nombre string, usu *Usuarios.Bita) {
 			auxLis = auxLis.Siguiente
 		}
 	} else {
-		fmt.Println(" La lista doble se encuentra Vacia ")
+		fmt.Println(" La Pila se encuentra Vacia ")
 	}
 }
 
@@ -72,7 +88,21 @@ func (listat *ListaDobl) ImprimirPila(nombre string) {
 			auxLis = auxLis.Siguiente
 		}
 	} else {
-		fmt.Println(" La lista doble se encuentra Vacia ")
+		fmt.Println(" La Pila se encuentra Vacia ")
+	}
+}
+
+func (listat *ListaDobl) GraficarAdmin(nombre string) {
+	auxLis := listat.Primero
+	if listat.Primero != nil {
+		for auxLis != nil {
+			if auxLis.Persona.Nombre == nombre {
+				auxLis.Pilita.Graficar()
+			}
+			auxLis = auxLis.Siguiente
+		}
+	} else {
+		fmt.Println(" La Pila se encuentra Vacia ")
 	}
 }
 
@@ -159,32 +189,34 @@ func (listat *ListaDobl) ReporteJs() {
 	if listat.Primero != nil {
 		listat.Ordenamiento()
 		for actual != nil {
-			if actual.Siguiente == nil {
-				prubjs := Usuarios.Usuario{
-					Nombre:       actual.Persona.Nombre,
-					Apellido:     actual.Persona.Apellido,
-					Carnet:       actual.Persona.Carnet,
-					Password:     actual.Persona.Password,
-					Carpeta_Raiz: "/",
+			if actual.Persona.Nombre != "admin" {
+				if actual.Siguiente == nil {
+					prubjs := Usuarios.Usuario{
+						Nombre:       actual.Persona.Nombre,
+						Apellido:     actual.Persona.Apellido,
+						Carnet:       actual.Persona.Carnet,
+						Password:     actual.Persona.Password,
+						Carpeta_Raiz: "/",
+					}
+					dat, err := json.Marshal(prubjs)
+					if err != nil {
+						log.Fatal(err)
+					}
+					arch += string(dat) + "\n"
+				} else {
+					prubjs := Usuarios.Usuario{
+						Nombre:       actual.Persona.Nombre,
+						Apellido:     actual.Persona.Apellido,
+						Carnet:       actual.Persona.Carnet,
+						Password:     actual.Persona.Password,
+						Carpeta_Raiz: "/",
+					}
+					dat, err := json.Marshal(prubjs)
+					if err != nil {
+						log.Fatal(err)
+					}
+					arch += string(dat) + ",\n"
 				}
-				dat, err := json.Marshal(prubjs)
-				if err != nil {
-					log.Fatal(err)
-				}
-				arch += string(dat) + "\n"
-			} else {
-				prubjs := Usuarios.Usuario{
-					Nombre:       actual.Persona.Nombre,
-					Apellido:     actual.Persona.Apellido,
-					Carnet:       actual.Persona.Carnet,
-					Password:     actual.Persona.Password,
-					Carpeta_Raiz: "/",
-				}
-				dat, err := json.Marshal(prubjs)
-				if err != nil {
-					log.Fatal(err)
-				}
-				arch += string(dat) + ",\n"
 			}
 			actual = actual.Siguiente
 		}
@@ -199,5 +231,54 @@ func (listat *ListaDobl) ReporteJs() {
 	} else {
 		fmt.Println(" La lista doble se encuentra Vacia ")
 	}
+
+}
+
+func (listat *ListaDobl) Graficadoble() {
+	tmp := listat.Primero
+	nombrearch := "./graflistadoble.dot"
+	nombreimage := "graflistadoble.png"
+	var dot = "digraph G{\nbgcolor = \"none\"\nlabel=\"Reporte de lista enlazada doble\";\nnode[shape=box, color=black, style=filled fillcolor=cadetblue1]\n"
+	var conexion = "{rank=same;\n"
+	var dot2 = ""
+	var conexion2 = ""
+	var num = 0
+	for tmp != nil {
+		if tmp.Persona.Nombre != "admin" {
+			dot += "N" + strconv.Itoa(num) + "[label=\"" + tmp.Persona.Nombre + " " + tmp.Persona.Apellido + " " + strconv.Itoa(tmp.Persona.Carnet) + "\", ];\n"
+			var tem = tmp.Pilita.Primero
+			var nu = 0
+			if tmp.Pilita != nil {
+				for tem != nil {
+					dot2 += "n" + strconv.Itoa(num) + strconv.Itoa(nu) + "[label=\"" + tem.Persona.Actividad + " " + tem.Persona.Fecha + " " + tem.Persona.Hora + "\",color=black, style=filled fillcolor=cornsilk];\n"
+					if tem.Siguiente != nil {
+						var aux = nu + 1
+						conexion2 += "n" + strconv.Itoa(num) + strconv.Itoa(nu) + " -> n" + strconv.Itoa(num) + strconv.Itoa(aux) + ";\n"
+					}
+					tem = tem.Siguiente
+					nu += 1
+				}
+				conexion2 += "N" + strconv.Itoa(num) + " -> n" + strconv.Itoa(num) + "0"
+				dot += dot2 + "\n" + conexion2 + "\n"
+				conexion2 = ""
+				dot2 = ""
+			}
+			if tmp.Siguiente != nil {
+				var auxn = num + 1
+				conexion += "N" + strconv.Itoa(num) + " -> N" + strconv.Itoa(auxn) + ";\n"
+				conexion += "N" + strconv.Itoa(auxn) + " -> N" + strconv.Itoa(num) + ";\n"
+			} else {
+
+			}
+			num += 1
+		}
+		tmp = tmp.Siguiente
+
+	}
+	dot += "\n" + conexion + "}\n"
+	dot += "}"
+	Dot.CrearArchivo(nombrearch)
+	Dot.EscribirArchivoDot(dot, nombrearch)
+	Dot.Ejecutar(nombreimage, nombrearch)
 
 }

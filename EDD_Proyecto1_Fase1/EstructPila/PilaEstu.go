@@ -1,8 +1,10 @@
 package EstructPila
 
 import (
+	"Fase1/Dot"
 	"Fase1/Usuarios"
 	"fmt"
+	"strconv"
 )
 
 // Aqui encontramos el nodo
@@ -48,4 +50,34 @@ func (pilita *Pil) Imprimir() {
 	} else {
 		fmt.Println(" La Pila del Estudiante se Encuentra ")
 	}
+}
+
+func (pilita *Pil) Graficar() {
+	nombrearch := "./grafpila.dot"
+	nombreimage := "grafpila.png"
+	code := "digraph G {\nlabel = \" PILA\" \nfontname=\"impact\"\nfontsize=\"25\" \nbgcolor = \"none\" \n graph [pad=\"0.1\", nodesep=\"0.1\", ranksep=\"0.1\"]; \nedge[style=invis] \n node [width=2, shape=\"record\",  style=\"filled\", color=\"black\", fillcolor=\"cadetblue1\"];\n\n"
+	tmp := pilita.Primero
+	i := 0
+	for tmp != nil {
+		code += "nodo" + strconv.Itoa(i) + " [label=\"" + tmp.Persona.Actividad + " " + tmp.Persona.Fecha + " " + tmp.Persona.Hora + "\"]\n"
+		i += 1
+		tmp = tmp.Siguiente
+	}
+	tmp = pilita.Primero
+	i = 0
+	code += "\n"
+	for tmp != nil {
+		if i == pilita.Contador {
+			code += "nodo" + strconv.Itoa(i-1) + " -> nodo" + strconv.Itoa(i) + "\n"
+		} else {
+			code += "nodo" + strconv.Itoa(i) + " -> nodo" + strconv.Itoa(i+1) + "\n"
+		}
+		i += 1
+		tmp = tmp.Siguiente
+	}
+	code += "rankdir=\"TB\"\n"
+	code += "\n}"
+	Dot.CrearArchivo(nombrearch)
+	Dot.EscribirArchivoDot(code, nombrearch)
+	Dot.Ejecutar(nombreimage, nombrearch)
 }

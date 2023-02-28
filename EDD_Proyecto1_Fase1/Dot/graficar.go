@@ -7,7 +7,7 @@ import (
 	"os/exec"
 )
 
-func crearArchivo(nombre_archivo string) {
+func CrearArchivo(nombre_archivo string) {
 	var _, err = os.Stat(nombre_archivo)
 	if os.IsNotExist(err) {
 		var file, err = os.Create(nombre_archivo)
@@ -19,7 +19,7 @@ func crearArchivo(nombre_archivo string) {
 	fmt.Println("Archivo creado exitosamente", nombre_archivo)
 }
 
-func escribirArchivoDot(contenido string, nombre_archivo string) {
+func EscribirArchivoDot(contenido string, nombre_archivo string) {
 	var file, err = os.OpenFile(nombre_archivo, os.O_RDWR, 0644)
 	if err != nil {
 		return
@@ -36,7 +36,7 @@ func escribirArchivoDot(contenido string, nombre_archivo string) {
 	fmt.Println("Archivo actualizado exitosamente")
 }
 
-func ejecutar(nombre_imagen string, archivo_dot string) {
+func Ejecutar(nombre_imagen string, archivo_dot string) {
 	path, _ := exec.LookPath("dot")
 	cmd, _ := exec.Command(path, "-Tpng", archivo_dot).Output()
 	mode := 0777

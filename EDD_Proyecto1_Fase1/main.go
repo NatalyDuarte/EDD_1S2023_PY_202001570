@@ -62,6 +62,7 @@ func MenuInicio() {
 		fmt.Println(usuario)
 		respu = listadob.Verificar(usuario, password)
 		if respu != "None" {
+			fmt.Println("Se inicio correctamente")
 			InicioUsuario(respu)
 		}
 	}
@@ -83,25 +84,20 @@ func MenuAdmin() {
 		fmt.Println("|   2. Ver Estudiantes del Sistema                     |")
 		fmt.Println("|   3. Registrar Nuevo Estudiante                      |")
 		fmt.Println("|   4. Carga Masiva de Estudiantes                     |")
-		fmt.Println("|   5. Cerrar Sesion                                   |")
+		fmt.Println("|   5. Reporte de lista doble                          |")
+		fmt.Println("|   6. Reporte de cola                                 |")
+		fmt.Println("|   7. Reporte de la pila de administrador             |")
+		fmt.Println("|   8. Reporte JSON                                    |")
+		fmt.Println("|   9. Cerrar Sesion                                   |")
 		fmt.Println("========================================================")
 		fmt.Println("Elige una opcion: ")
 		fmt.Scanln(&opc)
 		if opc == 1 {
-			/*path, err := os.Getwd()
-			if err != nil {
-				log.Println(err)
-			}*/
-			// Escribir el archivo .dot
-			//Dot.WriteDotFile(colota.Graficar(), "grafcola.dot", path)
-			// Ejecutar COmando en consola
-			//Dot.GeneratePNG("grafcola.dot", path)
 			GuardarPila("admin", "Vio estudiantes pendientes")
 			fmt.Println("=================Estudiantes pendientes:===============")
 			Imprimir()
 		} else if opc == 2 {
 			GuardarPila("admin", "Vio estudiantes del sistema")
-			listadob.ReporteJs()
 			fmt.Println("=================Listado de Estudiantes:===============")
 			listadob.Imprimir()
 		} else if opc == 3 {
@@ -111,6 +107,14 @@ func MenuAdmin() {
 			GuardarPila("admin", "Realizo Carga Masiva")
 			CargaMasiva()
 		} else if opc == 5 {
+			listadob.Graficadoble()
+		} else if opc == 6 {
+			colota.Graficar()
+		} else if opc == 7 {
+			listadob.GraficarAdmin("admin")
+		} else if opc == 8 {
+			listadob.ReporteJs()
+		} else if opc == 9 {
 			GuardarPila("admin", "Cerro Sesion")
 			fmt.Println("Cerrando Sesion........")
 			break
@@ -124,6 +128,7 @@ func MenuAdmin() {
 func RegistroUsuario() {
 	var nombre, apellido, contrase string
 	var carnet, numpend, opcio int
+	var resu bool
 	fmt.Println("=========Registro De Estudiantes - EDD GoDrive==========")
 	fmt.Println("Ingrese su Nombre: ")
 	fmt.Scanln(&nombre)
@@ -145,10 +150,15 @@ func RegistroUsuario() {
 		fmt.Print("Elige una opcion: ")
 		fmt.Scanln(&opcio)
 		if opcio == 1 {
-			GuardarPila("admin", "Acepto estudiante")
-			listadob.InsertarDob(usuari)
-			colota.Eliminar(usuari)
-			fmt.Println("Aceptado")
+			resu = listadob.BuscarNodo(usuari.Carnet)
+			if resu != true {
+				listadob.InsertarDob(usuari)
+				colota.Eliminar(usuari)
+				GuardarPila("admin", "Acepto estudiante")
+				fmt.Println("Aceptado")
+			} else {
+				fmt.Println("Usuario repetido")
+			}
 			break
 		} else if opcio == 2 {
 			GuardarPila("admin", "Rechazo estudiante")
@@ -163,6 +173,7 @@ func RegistroUsuario() {
 
 func Imprimir() {
 	var opcio int
+	var resu bool
 	actual := colota.Primero
 	if colota.Primero != nil {
 		for actual != nil {
@@ -174,10 +185,15 @@ func Imprimir() {
 			fmt.Print("Elige una opcion: ")
 			fmt.Scanln(&opcio)
 			if opcio == 1 {
-				GuardarPila("admin", "Acepto estudiante")
-				listadob.InsertarDob(actual.Persona)
-				colota.Eliminar(actual.Persona)
-				fmt.Println("Aceptado")
+				resu = listadob.BuscarNodo(actual.Persona.Carnet)
+				if resu != true {
+					GuardarPila("admin", "Acepto estudiante")
+					listadob.InsertarDob(actual.Persona)
+					colota.Eliminar(actual.Persona)
+					fmt.Println("Aceptado")
+				} else {
+					fmt.Println("Usuario repetido")
+				}
 			} else if opcio == 2 {
 				GuardarPila("admin", "Rechazo estudiante")
 				fmt.Println("Se rechazo")
