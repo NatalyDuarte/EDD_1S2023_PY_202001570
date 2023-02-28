@@ -7,25 +7,25 @@ import (
 	"os/exec"
 )
 
-func CrearArchivo(nombre_archivo string) {
-	var _, err = os.Stat(nombre_archivo)
+func CrearArchivo(nombrearchi string) {
+	var _, err = os.Stat(nombrearchi)
 	if os.IsNotExist(err) {
-		var file, err = os.Create(nombre_archivo)
+		var file, err = os.Create(nombrearchi)
 		if err != nil {
 			return
 		}
 		defer file.Close()
 	}
-	fmt.Println("Archivo creado exitosamente", nombre_archivo)
+	fmt.Println("Archivo Creado", nombrearchi)
 }
 
-func EscribirArchivoDot(contenido string, nombre_archivo string) {
-	var file, err = os.OpenFile(nombre_archivo, os.O_RDWR, 0644)
+func EscribirArchivoDot(conte string, nombrearchi string) {
+	var file, err = os.OpenFile(nombrearchi, os.O_RDWR, 0644)
 	if err != nil {
 		return
 	}
 	defer file.Close()
-	_, err = file.WriteString(contenido)
+	_, err = file.WriteString(conte)
 	if err != nil {
 		return
 	}
@@ -33,7 +33,7 @@ func EscribirArchivoDot(contenido string, nombre_archivo string) {
 	if err != nil {
 		return
 	}
-	fmt.Println("Archivo actualizado exitosamente")
+	fmt.Println("Archivo Actualizado")
 }
 
 func Ejecutar(nombre_imagen string, archivo_dot string) {
