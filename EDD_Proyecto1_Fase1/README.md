@@ -87,7 +87,6 @@ Contiene un archivo con golang en cual sirve para crear la estructura de una pil
 
 # Carpeta Usuarios: 
 Esta carpeta cuenta con dos clases, una que la de usuarios y otra que es la de la btiacora, estos son objetos que se usaran en las estructuras de datos anteriormente mencionadas, la clase de usuario tiene atributos como nombre, apellido, carnet, password, carpeta_raiz. Y la clase de bitácora tiene atributos como actividad, fecha y hora.     
-![image](https://user-images.githubusercontent.com/82484670/222015066-824790e6-492e-42e6-83bc-76f43fed4d56.png)  
 ![image](https://user-images.githubusercontent.com/82484670/222015133-0249935e-2b3d-4986-a419-87b58be74a9e.png)
 ![image](https://user-images.githubusercontent.com/82484670/222015102-241d19cd-3c7e-4240-a71a-754d1cf7d18f.png)
 
