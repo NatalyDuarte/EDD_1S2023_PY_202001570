@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -7,21 +8,18 @@
     <meta name="author" content="" />
     <title>GoDrive</title>
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
-    <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900"
-        rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i"
-        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
 </head>
+
 <body id="page-top">
     <!-- PESTAÑA PRINCIPAL -->
     <div id="HomePag" style="display: block;">
         <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
             <div class="container px-5">
                 <a class="navbar-brand" href="#page-top">GoDrive</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
-                    aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item"><a class="nav-link" href="#HomePag">Home</a></li>
@@ -34,8 +32,7 @@
             <div class="masthead-content">
                 <div class="container px-5">
                     <h1 class="masthead-heading mb-0">GoDrive</h1>
-                    <h2>Bienvenido a la aplicación creada para el manejo de archivos para la
-                        Universidad de San Carlos de Guatemala de la facultad de Ingeniería</h2>
+                    <h2>Bienvenido a la aplicación creada para el manejo de archivos para la Universidad de San Carlos de Guatemala de la facultad de Ingeniería</h2>
                 </div>
             </div>
             <div class="bg-circle-1 bg-circle"></div>
@@ -65,7 +62,9 @@
                         </form>
                     </div>
                 </div>
-            </div><BR><BR>
+            </div>
+            <BR>
+            <BR>
         </section>
     </div>
     <!-- DIV PARA EL ADMIN -->
@@ -74,9 +73,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
             <div class="container px-5">
                 <a class="navbar-brand" href="#page-top">GoDrive</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
-                    aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item"><a class="nav-link" href="#mostrar">Mostrar Alumnos</a></li>
@@ -100,6 +97,7 @@
             <div class="bg-circle-2 bg-circle"></div>
             <div class="bg-circle-3 bg-circle"></div>
         </header>
+        <br><br><br>
         <section id="cargam">
             <div class="container px-5">
                 <div class="row gx-5 align-items-center">
@@ -113,9 +111,9 @@
                                     <br><br><br>
                                     <form>
                                         <p style="color: white;">
-                                        <h2 style="color: white;">Carga Estudiantes Por JSON:</h2> <br>
-                                        <input type="file" id="c1" name="jsonsubida1" accept="JSON/json, .json, .JSON"
-                                            style="color:white;"><br><br>
+                                            <h2 style="color: white;">Carga Estudiantes Por JSON:</h2> <br>
+                                            <input type="file" id="cargamasi" name="jsonsubida1" accept="JSON/json, .json, .JSON" style="color:white;"><br><br>
+                                            <a class="btn btn-primary  rounded-pill " onclick="CargaEstu()">Cargar</a>
                                         </p>
                                     </form>
                                 </div>
@@ -126,11 +124,59 @@
                 </div>
             </div>
         </section>
+        <section id="mostrar">
+            <div class="container px-5">
+                <div class="row gx-5 align-items-center">
+                    <div class=" order-lg-1">
+                        <div class="p-2">
+                            <br><br><br><br>
+                            <h2 class="display-4">MOSTRAR ALUMNOS</h2>
+                            <SELECT NAME="selCombo" SIZE=1 id="selCombo" onchange="ObtenerSele();"> 
+                                <OPTION VALUE="In-Orden">In-Orden</OPTION>
+                                <OPTION VALUE="Post-Orden">Post-Orden</OPTION>
+                                <OPTION VALUE="Pre-Orden">Pre-Orden</OPTION>
+                            </SELECT>
+                            <div id="TablaInOrder" style="display: block;">
+                            </div>
+                            <div id="TablaPostOrder" style="display: none;">
+                            </div>
+                            <div id="TablaPreOrder" style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <br><br><br><br>
+        <section id="arbol">
+            <div class="container px-5">
+                <div class="row gx-5 align-items-center">
+                    <div class=" order-lg-1">
+                        <div class="p-2">
+                            <br><br><br><br>
+                            <h2 class="display-4">ARBOL AVL</h2>
+                            <a class="btn btn-primary  rounded-pill " onclick="GrafiAvl()">Visualizar</a>
+                            <div id="Visua" style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>
+    <script src="https://unpkg.com/d3-graphviz@3.0.5/build/d3-graphviz.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://superal.github.io/canvas2image/canvas2image.js "></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/NodoAvl.js"></script>
+    <script src="js/Usuario.js"></script>
 </body>
 
 </html>
