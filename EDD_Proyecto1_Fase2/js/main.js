@@ -3,11 +3,30 @@ let sele = document.getElementById("selCombo").value;
 function Login() {
     var usuario = document.getElementById("user").value;
     var pass = document.getElementById("pass").value;
+    var respu = Alumnos.buscar(usuario, pass, Alumnos.raiz)
     if (usuario == "Admin" && pass == "Admin") {
         alert("Bienvenido Administrador")
         document.getElementById("HomePag").style.display = "none";
         document.getElementById("AdminPag").style.display = "block";
         window.location.href = "#page-top";
+        document.getElementById("user").value = "";
+        document.getElementById("pass").value = "";
+    } else if (respu != null) {
+        if (respu == "contrainc") {
+            document.getElementById("pass").value = "";
+        } else {
+            alert("BIENVENIDO USUARIO")
+            document.getElementById("HomePag").style.display = "none";
+            document.getElementById("UsuaPag").style.display = "block";
+            window.location.href = "#page-top";
+            document.getElementById("user").value = "";
+            document.getElementById("pass").value = "";
+            var tex = '<h1 class="masthead-heading mb-0">Bienvenido</h1>'
+            tex += "<h2>" + usuario + "</h2>"
+            document.getElementById("nombreusua").innerHTML = tex
+        }
+    } else if (respu == null) {
+        alert("CARNET INCORRECTO.")
     }
 }
 
@@ -97,15 +116,20 @@ class ArbolAVL {
     }
 
     //BUSCAR NODO;
-    buscar(carnet, raiz1) {
+    buscar(carnet, password, raiz1) {
         if (raiz1 == null) {
             return null;
-        } else if (ra1.dato.carnet == carnet) {
-            return raiz1;
+        } else if (raiz1.dato.carnet == carnet) {
+            if (raiz1.dato.password == password) {
+                return raiz1.dato.carnet;
+            } else {
+                alert("CONTRASEÑA INCORRECTA");
+                return "contrainc";
+            }
         } else if (raiz1.dato.carnet < carnet) {
-            return this.buscar(carnet, raiz1.derecha);
+            return this.buscar(carnet, password, raiz1.derecha);
         } else {
-            return this.buscar(carnet, raiz1.izquierda);
+            return this.buscar(carnet, password, raiz1.izquierda);
         }
     }
 
