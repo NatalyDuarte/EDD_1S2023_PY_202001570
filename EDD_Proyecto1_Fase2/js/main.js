@@ -1,11 +1,13 @@
 let sele = document.getElementById("selCombo").value;
 let Alumnos = new ArbolAVL();
+let usuario;
+
 $('#label-in').on('click', function() {
     $('#subiarchi').trigger('click');
 });
 
 function Login() {
-    var usuario = document.getElementById("user").value;
+    usuario = document.getElementById("user").value;
     var pass = document.getElementById("pass").value;
     var respu = Alumnos.buscar(usuario, pass, Alumnos.raiz)
     if (usuario == "Admin" && pass == "Admin") {
@@ -84,6 +86,7 @@ function CargaEstu() {
                     Alumnos.insertar(nuevo);
                 }
             }
+            localStorage.setItem("CargaMasiva", JSON.stringify(Alumnos))
             alert("¡ ARCHIVO JSON ESTUDIANTES LEIDO !")
             document.getElementById("TablaInOrder").style.display = "block";
             document.getElementById("TablaPostOrder").style.display = "none";
@@ -97,19 +100,47 @@ function CargaEstu() {
     } else {
         alert("¡ ERROR ARCHIVO NO LEIDO !")
     }
+}
 
+function VerLocalCargaMasiva() {
+    let temp = localStorage.getItem("CargaMasiva")
+    Alumnos.raiz = JSON.parse(temp).raiz;
+    let text = '<table class="table table-striped"><thead><tr><th scope="col"><center>CARNET</center></th><th scope="col"><center>NOMBRE</center></th></tr></thead><tbody>\n'
+    text += Alumnos.grafEnOrdenLR(Alumnos.raiz)
+    text += "</tbody></table>"
+    document.getElementById("TablaInOrder").innerHTML = text
 }
 
 function GrafiAvl() {
     document.getElementById("Visua").style.display = "block"
     if (Alumnos.raiz != null) {
-        var dot = Alumnos.grafico()
-        d3.select("#Visua").graphviz()
-            .width(1492)
-            .height(992)
-            .renderDot(dot)
 
+        let url = 'https://quickchart.io/graphviz?graph=';
+        let body = Alumnos.grafico();
+        $("#graph").attr("src", url + body);
+        console.log(url + body)
     } else {
         alert("¡ NO HAY DATOS !")
     }
 }
+
+function CrearCarpeta() {
+    let NombreCarpe = document.getElementById("nomcarpeta").value;
+    let direccion = document.getElementById("direccarpeta").value;
+    Alumnos.buscarinde(usuario, Alumnos.raiz, NombreCarpe, direccion);
+    alert("Carpeta creada exitosamente");
+    //let text = Alumnos.getHTMLInde(usuario, Alumnos.raiz, direccion);
+    //alert(text)
+    document.getElementById("areadecarp").innerHTML = text;
+    document.getElementById("nomcarpeta").value = "";
+    document.getElementById("direccarpeta").value = "";
+}
+
+function EntrarCarpeta(NombreFolder) {
+    let direccion = document.getElementById("direccarpeta").value;
+    let direcam = direccion == '/' ? direccion + NombreFolder : direccion + "/" + NombreFolder;
+    document.getElementById("direccarpeta").value = direcam;
+    document.getElementById("areadecarp").innerHTML = direcam;
+}
+
+$(document).ready(VerLocalCargaMasiva);

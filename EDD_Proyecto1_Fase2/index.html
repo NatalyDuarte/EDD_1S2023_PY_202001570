@@ -157,7 +157,9 @@
                             <br><br><br><br>
                             <h2 class="display-4">ARBOL AVL</h2>
                             <a class="btn btn-primary  rounded-pill " onclick="GrafiAvl()">Visualizar</a>
-                            <div id="Visua" style="display: none;">
+                            <div id="Visua">
+                                <hr>
+                                <img id="graph">
                             </div>
                         </div>
                     </div>
@@ -202,17 +204,18 @@
                             <br><br><br><br>
                             <center>
                                 <div class="contai">
-                                    <input type="text" placeholder="Buscar">
+                                    <input type="text" id="direccarpeta" placeholder="Buscar">
                                     <div class="btn">
-                                        <i class="fa fa-search"></i>
+                                        <i class="fa fa-search" onclick="EntrarCarpeta()"></i>
                                     </div>
                                 </div>
-                                <div style="background-color: black; height: 260px; width: 600px; border-radius: 1rem;">
+                                <div id="areadecarp" style="background-color: black;  border-radius: 1rem;">
                                     <br><br><br>
 
                                 </div>
                                 <br>
-                                <a class="btn btn-primary  rounded-pill " onclick="CerrarUsua()">CREAR CARPETA</a>
+                                <input type="text" id="nomcarpeta" placeholder="Nombre Carpeta"><br><br>
+                                <a class="btn btn-primary  rounded-pill " onclick="CrearCarpeta()">CREAR CARPETA</a>
                                 <a class="btn btn-primary  rounded-pill " onclick="CerrarUsua()">ELIMINAR CARPETA</a>
                                 <input type="file" id="subiarchi" accept="JPG/jpg, .jpg, .JPG,PNG/png, .png, .PNG,TXT/txt, .txt, .TXT,PDF/pdf, .pdf, .PDF," style="display: none;"><br><br>
                                 <a class="btn btn-primary  rounded-pill " id="label-in" onclick="CerrarUsua()"><img src="../EDD_Proyecto1_Fase2/img/subirarch.png" height="50" width="50">SUBIR ARCHIVOS</a>
@@ -225,14 +228,14 @@
         </section>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://d3js.org/d3.v5.min.js"></script>
-        <script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>
-        <script src="https://unpkg.com/d3-graphviz@3.0.5/build/d3-graphviz.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-        <script src="https://superal.github.io/canvas2image/canvas2image.js "></script>
-        <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+        <!-- JQUERY -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <!-- Bootstrap -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
         <script src="js/Usuario.js"></script>
-        <script src="js/ArbolIndexado.js"></script>
+        <script scr="js/MatrizDispersa.js"></script>
         <script src="js/ArbolAvl.js"></script>
         <script src="js/main.js"></script>
 </body>
