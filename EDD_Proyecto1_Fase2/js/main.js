@@ -1,6 +1,7 @@
 let sele = document.getElementById("selCombo").value;
 let Alumnos = new ArbolAVL();
 let usuario;
+let localusua;
 
 $('#label-in').on('click', function() {
     $('#subiarchi').trigger('click');
@@ -30,6 +31,7 @@ function Login() {
             var tex = '<h1 class="masthead-heading mb-0">Bienvenido</h1>'
             tex += "<h2>" + usuario + "</h2>"
             document.getElementById("nombreusua").innerHTML = tex
+            VerLocalArbolInde();
         }
     } else if (respu == null) {
         alert("CARNET INCORRECTO.")
@@ -129,11 +131,9 @@ function CrearCarpeta() {
     let direccion = document.getElementById("direccarpeta").value;
     Alumnos.buscarinde(usuario, Alumnos.raiz, NombreCarpe, direccion);
     alert("Carpeta creada exitosamente");
-    //let text = Alumnos.getHTMLInde(usuario, Alumnos.raiz, direccion);
-    //alert(text)
+    let text = Alumnos.getHTMLInde(usuario, Alumnos.raiz, direccion);
     document.getElementById("areadecarp").innerHTML = text;
     document.getElementById("nomcarpeta").value = "";
-    document.getElementById("direccarpeta").value = "";
 }
 
 function EntrarCarpeta(NombreFolder) {
@@ -141,6 +141,40 @@ function EntrarCarpeta(NombreFolder) {
     let direcam = direccion == '/' ? direccion + NombreFolder : direccion + "/" + NombreFolder;
     document.getElementById("direccarpeta").value = direcam;
     document.getElementById("areadecarp").innerHTML = direcam;
+}
+
+function RetornarInicio() {
+    document.getElementById("direccarpeta").value = "/";
+    let text = Alumnos.getHTMLInde(usuario, Alumnos.raiz, "/");
+    document.getElementById("areadecarp").innerHTML = text;
+}
+
+function GrafiInde() {
+    document.getElementById("Visua1").style.display = "block"
+    if (Alumnos.raiz != null) {
+        let url = 'https://quickchart.io/graphviz?graph=';
+        let body = `digraph G { ${Alumnos.GrafiInde(usuario, Alumnos.raiz)} }`
+        $("#graph1").attr("src", url + body);
+        console.log(url + body)
+        localusua = Alumnos.ObteLocalInde(usuario, Alumnos.raiz);
+        let nombre = "ArbolInde" + usuario;
+        localStorage.setItem(nombre, JSON.stringify(localusua));
+    } else {
+        alert("¡ NO HAY DATOS !")
+    }
+}
+
+function VerLocalArbolInde() {
+    let res = Alumnos.ObteLocalIndeGet(usuario, Alumnos.raiz)
+    if (res == "realizado") {
+        let direccion = document.getElementById("direccarpeta").value;
+        let text1 = Alumnos.getHTMLInde(usuario, Alumnos.raiz, direccion);
+        document.getElementById("areadecarp").innerHTML = text1;
+    }
+}
+
+function BorrarLocal() {
+    localStorage.clear()
 }
 
 $(document).ready(VerLocalCargaMasiva);

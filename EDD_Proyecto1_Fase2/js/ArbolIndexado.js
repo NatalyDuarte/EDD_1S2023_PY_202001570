@@ -1,6 +1,7 @@
 class NAnode {
     constructor(NombreFolder) {
         this.NombreFolder = NombreFolder;
+        this.files = [];
         this.ArchivosDFold = [];
         this.id = null;
         //this.matriz = new Dispersa();
@@ -12,9 +13,7 @@ class ArbolIndexado {
         this.raiz.id = 0;
         this.size = 1;
     }
-    hola() {
-        alert("Aqui si llego")
-    }
+
     InsertarCa(NombreFolder, indice) {
         let nuevo = new NAnode(NombreFolder);
         let indicenodo = this.ObtFolder(indice);
@@ -22,7 +21,6 @@ class ArbolIndexado {
             this.size += 1;
             nuevo.id = this.size;
             indicenodo.ArchivosDFold.push(nuevo);
-            alert("llegox2")
         } else {
             console.log("No existe esa ruta");
         }
@@ -48,7 +46,7 @@ class ArbolIndexado {
         }
     }
 
-    graph() {
+    Graficar() {
         let nodes = "";
         let connections = "";
 
@@ -73,7 +71,7 @@ class ArbolIndexado {
         let node = this.ObtFolder(ruta);
         let code = "";
         node.ArchivosDFold.map(child => {
-            code += ` <div class="col-1 folder" onclick="EntrarCarpeta('${child.NombreFolder}')">
+            code += ` <div class="col-2 folder" onclick="EntrarCarpeta('${child.NombreFolder}')">
                         <img src="../EDD_Proyecto1_Fase2/img/carpeta.png" width="100%"/>
                         <p class="h6 text-center">${child.NombreFolder}</p>
                     </div>`

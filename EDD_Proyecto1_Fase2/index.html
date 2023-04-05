@@ -60,6 +60,7 @@
                             </div>
                             <button type="button" class="btn btn-primary btn-block mb-4" onclick="Login()">Inicio</button>
                         </form>
+                        <button type="button" class="btn btn-primary btn-block mb-4" onclick="BorrarLocal()">Borrar LocalStorage</button>
                     </div>
                 </div>
             </div>
@@ -204,12 +205,13 @@
                             <br><br><br><br>
                             <center>
                                 <div class="contai">
-                                    <input type="text" id="direccarpeta" placeholder="Buscar">
+                                    <input type="text" id="direccarpeta" disabled value="/">
                                     <div class="btn">
                                         <i class="fa fa-search" onclick="EntrarCarpeta()"></i>
                                     </div>
+                                    <a class="btn btn-primary  rounded-pill " onclick="RetornarInicio()">Inicio</a>
                                 </div>
-                                <div id="areadecarp" style="background-color: black;  border-radius: 1rem;">
+                                <div id="areadecarp">
                                     <br><br><br>
 
                                 </div>
@@ -226,9 +228,25 @@
                 </div>
             </div>
         </section>
+        <section id="carptas">
+            <div class="container px-5">
+                <div class="row gx-5 align-items-center">
+                    <div class=" order-lg-1">
+                        <div class="p-2">
+                            <br><br><br><br>
+                            <h2 class="display-4">ARBOL INDEXADO</h2>
+                            <a class="btn btn-primary  rounded-pill " onclick="GrafiInde()">Visualizar</a>
+                            <div id="Visua1">
+                                <hr>
+                                <img id="graph1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <!-- JQUERY -->
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <!-- Bootstrap -->
@@ -236,6 +254,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
         <script src="js/Usuario.js"></script>
         <script scr="js/MatrizDispersa.js"></script>
+        <script src="js/ArbolIndexado.js"></script>
         <script src="js/ArbolAvl.js"></script>
         <script src="js/main.js"></script>
 </body>
