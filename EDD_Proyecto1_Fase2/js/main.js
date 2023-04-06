@@ -116,9 +116,8 @@ function VerLocalCargaMasiva() {
 function GrafiAvl() {
     document.getElementById("Visua").style.display = "block"
     if (Alumnos.raiz != null) {
-
         let url = 'https://quickchart.io/graphviz?graph=';
-        let body = Alumnos.grafico();
+        let body = `digraph G {\n node [shape = record, style=filled,fillcolor=lightpink, penwidth=3];\n ${Alumnos.Grafi()} }`
         $("#graph").attr("src", url + body);
         console.log(url + body)
     } else {
@@ -136,11 +135,32 @@ function CrearCarpeta() {
     document.getElementById("nomcarpeta").value = "";
 }
 
+function EliminarCarpeta() {
+    let NombreCarpe = document.getElementById("nomcarpeta").value;
+    let direccion = document.getElementById("direccarpeta").value;
+    Alumnos.eliminde(usuario, Alumnos.raiz, NombreCarpe, direccion);
+    alert("Carpeta eliminada exitosamente");
+    let text = Alumnos.getHTMLInde(usuario, Alumnos.raiz, direccion);
+    document.getElementById("areadecarp").innerHTML = text;
+    document.getElementById("nomcarpeta").value = "";
+}
+
 function EntrarCarpeta(NombreFolder) {
     let direccion = document.getElementById("direccarpeta").value;
     let direcam = direccion == '/' ? direccion + NombreFolder : direccion + "/" + NombreFolder;
     document.getElementById("direccarpeta").value = direcam;
     document.getElementById("areadecarp").innerHTML = direcam;
+}
+
+function BuscarCarpeta() {
+    let direccion = document.getElementById("direccarpeta").value;
+    let resp = Alumnos.buscacar(usuario, Alumnos.raiz, direccion);
+    if (resp == null) {
+        alert("El directorio no es valido")
+    } else {
+        document.getElementById("direccarpeta").value = direccion;
+        document.getElementById("areadecarp").innerHTML = direccion;
+    }
 }
 
 function RetornarInicio() {
@@ -153,7 +173,7 @@ function GrafiInde() {
     document.getElementById("Visua1").style.display = "block"
     if (Alumnos.raiz != null) {
         let url = 'https://quickchart.io/graphviz?graph=';
-        let body = `digraph G { ${Alumnos.GrafiInde(usuario, Alumnos.raiz)} }`
+        let body = `digraph G {\n node [shape = record, style=filled,fillcolor=lightpink, penwidth=3];\n  ${Alumnos.GrafiInde(usuario, Alumnos.raiz)} }`
         $("#graph1").attr("src", url + body);
         console.log(url + body)
         localusua = Alumnos.ObteLocalInde(usuario, Alumnos.raiz);

@@ -1,7 +1,12 @@
+let nodes = "";
+let connections = "";
+let nombre = "";
+const fechaActual = new Date();
 class nodoAVL {
     constructor(dato) {
         this.dato = dato;
         this.ArbolInde = new ArbolIndexado();
+        this.Bitacoral = new ListaCircular();
         this.fe = 0;
         this.izquierda = null;
         this.derecha = null;
@@ -9,12 +14,10 @@ class nodoAVL {
     }
 }
 class ArbolAVL {
-
     constructor() {
-        this.raiz = null;
-    }
-
-    //BUSCAR NODO;
+            this.raiz = null;
+        }
+        //BUSCAR NODO;
     buscar(carnet, password, raiz1) {
         if (raiz1 == null) {
             return null;
@@ -192,7 +195,80 @@ class ArbolAVL {
         }
         return cadena
     }
+    Grafi() {
+        nodes = "";
+        connections = "";
+        this.GrafiN(this.raiz);
+        return nodes + connections;
+    }
+    GrafiN(current) {
+        if (current.izquierda != null) {
+            this.GrafiN(current.izquierda);
+            connections += `S_${current.dato.carnet} -> S_${current.izquierda.dato.carnet};\n`;
+        }
+        nodes += `S_${current.dato.carnet}[label="Carnet: ${current.dato.carnet}, Nombre: ${current.dato.nombre}, Altura: ${current.fe}"];`
+        if (current.derecha != null) {
+            this.GrafiN(current.derecha);
+            connections += `S_${current.dato.carnet} -> S_${current.derecha.dato.carnet};\n`;
+        }
+    }
     buscarinde(carnet, raiz1, NombreFolder, indice) {
+        if (raiz1 == null) {
+            return null;
+        } else if (raiz1.dato.carnet == carnet) {
+            let tmp = new ArbolIndexado();
+            tmp.raiz = raiz1.ArbolInde.raiz;
+            tmp.raiz.id = raiz1.ArbolInde.raiz.id;
+            tmp.size = raiz1.ArbolInde.size;
+            raiz1.ArbolInde = tmp;
+            nombre = raiz1.ArbolInde.InsertarCa(NombreFolder, indice);
+            const fecha = fechaActual.toLocaleDateString();
+            const hora = fechaActual.toLocaleTimeString();
+            var nuevo = new Bitacora("Se creo carpeta \"" + nombre + "\"", fecha, hora);
+            return this.InsertarBitacora(carnet, raiz1);
+        } else if (raiz1.dato.carnet < carnet) {
+            return this.buscarinde(carnet, raiz1.derecha, NombreFolder, indice);
+        } else {
+            return this.buscarinde(carnet, raiz1.izquierda, NombreFolder, indice);
+        }
+    }
+    InsertarBitacora(carnet, raiz1) {
+        if (raiz1 == null) {
+            return null;
+        } else if (raiz1.dato.carnet == carnet) {
+            let tmp = new ListaCircular();
+            tmp.primero = raiz1.Bitacoral.primero;
+            tmp.ultimo = raiz1.Bitacoral.ultimo;
+            tmp.size = raiz1.Bitacoral.size;
+            raiz1.Bitacoral = tmp;
+            const fecha = fechaActual.toLocaleDateString();
+            const hora = fechaActual.toLocaleTimeString();
+            var nuevo = new Bitacora("Se creo carpeta \"" + nombre + "\"", fecha, hora);
+            return raiz1.Bitacoral.InsertCir(nuevo);
+        } else if (raiz1.dato.carnet < carnet) {
+            return this.InsertarBitacora(carnet, raiz1.derecha, NombreFolder, indice);
+        } else {
+            return this.InsertarBitacora(carnet, raiz1.izquierda, NombreFolder, indice);
+        }
+    }
+    buscacar(carnet, raiz1, indice) {
+        if (raiz1 == null) {
+            return null;
+        } else if (raiz1.dato.carnet == carnet) {
+            let tmp = new ArbolIndexado();
+            tmp.raiz = raiz1.ArbolInde.raiz;
+            tmp.raiz.id = raiz1.ArbolInde.raiz.id;
+            tmp.size = raiz1.ArbolInde.size;
+            raiz1.ArbolInde = tmp;
+            let res = raiz1.ArbolInde.ObtFolder(indice);
+            return res;
+        } else if (raiz1.dato.carnet < carnet) {
+            return this.buscacar(carnet, raiz1.derecha, indice);
+        } else {
+            return this.buscacar(carnet, raiz1.izquierda, indice);
+        }
+    }
+    eliminde(carnet, raiz1, NombreFolder, indice) {
         console.log(raiz1)
         if (raiz1 == null) {
             return null;
@@ -202,11 +278,11 @@ class ArbolAVL {
             tmp.raiz.id = raiz1.ArbolInde.raiz.id;
             tmp.size = raiz1.ArbolInde.size;
             raiz1.ArbolInde = tmp;
-            return raiz1.ArbolInde.InsertarCa(NombreFolder, indice);
+            return raiz1.ArbolInde.EliminarCar(NombreFolder, indice);
         } else if (raiz1.dato.carnet < carnet) {
-            return this.buscarinde(carnet, raiz1.derecha, NombreFolder, indice);
+            return this.eliminde(carnet, raiz1.derecha, NombreFolder, indice);
         } else {
-            return this.buscarinde(carnet, raiz1.izquierda, NombreFolder, indice);
+            return this.eliminde(carnet, raiz1.izquierda, NombreFolder, indice);
         }
     }
     getHTMLInde(carnet, raiz1, direccion) {

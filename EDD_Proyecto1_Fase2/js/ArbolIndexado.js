@@ -15,14 +15,33 @@ class ArbolIndexado {
     }
 
     InsertarCa(NombreFolder, indice) {
-        let nuevo = new NAnode(NombreFolder);
         let indicenodo = this.ObtFolder(indice);
         if (indicenodo) {
             this.size += 1;
-            nuevo.id = this.size;
-            indicenodo.ArchivosDFold.push(nuevo);
+            let res = indicenodo.ArchivosDFold.find(child => child.NombreFolder == NombreFolder);
+            if (typeof res == 'undefined' || res == null) {
+                let nuevo = new NAnode(NombreFolder);
+                nuevo.id = this.size;
+                indicenodo.ArchivosDFold.push(nuevo);
+                return NombreFolder;
+            } else {
+                let nuevoc = new NAnode("Copia " + NombreFolder);
+                nuevoc.id = this.size;
+                indicenodo.ArchivosDFold.push(nuevoc);
+                return "Copia " + NombreFolder;
+            }
         } else {
-            console.log("No existe esa ruta");
+            alert("No existe esa ruta");
+        }
+    }
+
+    EliminarCar(NombreFolder, indice) {
+        let indicenodo = this.ObtFolder(indice);
+        if (indicenodo) {
+            this.size -= 1;
+            indicenodo.ArchivosDFold = indicenodo.ArchivosDFold.filter(child => child.NombreFolder !== NombreFolder);
+        } else {
+            alert("No existe esa ruta");
         }
     }
 

@@ -179,6 +179,7 @@
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item"><a class="nav-link" href="#carptas">Reporte Carpetas</a></li>
                         <li class="nav-item"><a class="nav-link" href="#archivos">Reporte Archivos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#repobita">Reporte Bitacora</a></li>
                         <li class="nav-item">
                             <CENTER><a class="btn btn-primary  rounded-pill " onclick="CerrarUsua()">CERRAR SESION</a></CENTER>
                         </li>
@@ -205,9 +206,9 @@
                             <br><br><br><br>
                             <center>
                                 <div class="contai">
-                                    <input type="text" id="direccarpeta" disabled value="/">
+                                    <input type="text" id="direccarpeta" value="/">
                                     <div class="btn">
-                                        <i class="fa fa-search" onclick="EntrarCarpeta()"></i>
+                                        <i class="fa fa-search" onclick="BuscarCarpeta()"></i>
                                     </div>
                                     <a class="btn btn-primary  rounded-pill " onclick="RetornarInicio()">Inicio</a>
                                 </div>
@@ -218,7 +219,7 @@
                                 <br>
                                 <input type="text" id="nomcarpeta" placeholder="Nombre Carpeta"><br><br>
                                 <a class="btn btn-primary  rounded-pill " onclick="CrearCarpeta()">CREAR CARPETA</a>
-                                <a class="btn btn-primary  rounded-pill " onclick="CerrarUsua()">ELIMINAR CARPETA</a>
+                                <a class="btn btn-primary  rounded-pill " onclick="EliminarCarpeta()">ELIMINAR CARPETA</a>
                                 <input type="file" id="subiarchi" accept="JPG/jpg, .jpg, .JPG,PNG/png, .png, .PNG,TXT/txt, .txt, .TXT,PDF/pdf, .pdf, .PDF," style="display: none;"><br><br>
                                 <a class="btn btn-primary  rounded-pill " id="label-in" onclick="CerrarUsua()"><img src="../EDD_Proyecto1_Fase2/img/subirarch.png" height="50" width="50">SUBIR ARCHIVOS</a>
                             </center>
@@ -254,7 +255,9 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
         <script src="js/Usuario.js"></script>
         <script scr="js/MatrizDispersa.js"></script>
+        <script src="js/Bitacora.js"></script>
         <script src="js/ArbolIndexado.js"></script>
+        <script src="js/ListaCircular.js"></script>
         <script src="js/ArbolAvl.js"></script>
         <script src="js/main.js"></script>
 </body>
