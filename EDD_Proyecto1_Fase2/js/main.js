@@ -2,6 +2,9 @@ let sele = document.getElementById("selCombo").value;
 let Alumnos = new ArbolAVL();
 let usuario;
 let localusua;
+let usuarioob;
+let fechaActual = new Date();
+let usuarioacti;
 
 $('#label-in').on('click', function() {
     $('#subiarchi').trigger('click');
@@ -10,7 +13,7 @@ $('#label-in').on('click', function() {
 function Login() {
     usuario = document.getElementById("user").value;
     var pass = document.getElementById("pass").value;
-    var respu = Alumnos.buscar(usuario, pass, Alumnos.raiz)
+    usuarioob = Alumnos.buscar(usuario, Alumnos.raiz)
     if (usuario == "Admin" && pass == "Admin") {
         alert("Bienvenido Administrador")
         document.getElementById("HomePag").style.display = "none";
@@ -18,11 +21,11 @@ function Login() {
         window.location.href = "#page-top";
         document.getElementById("user").value = "";
         document.getElementById("pass").value = "";
-    } else if (respu != null) {
-        if (respu == "contrainc") {
-            document.getElementById("pass").value = "";
-        } else {
+    } else if (usuarioob != null) {
+        if (usuarioob.password == pass) {
             alert("BIENVENIDO USUARIO")
+            console.log(usuarioob)
+            usuarioacti = new Usuaob(usuarioob.nombre, usuarioob.carnet, usuarioob.password, usuarioob.carpeta_raiz);
             document.getElementById("HomePag").style.display = "none";
             document.getElementById("UsuaPag").style.display = "block";
             window.location.href = "#page-top";
@@ -32,6 +35,11 @@ function Login() {
             tex += "<h2>" + usuario + "</h2>"
             document.getElementById("nombreusua").innerHTML = tex
             VerLocalArbolInde();
+            //VerLocalBitacora();
+
+        } else {
+            document.getElementById("pass").value = "";
+            alert("Contraseña Incorrecta")
         }
     } else if (respu == null) {
         alert("CARNET INCORRECTO.")
@@ -128,9 +136,16 @@ function GrafiAvl() {
 function CrearCarpeta() {
     let NombreCarpe = document.getElementById("nomcarpeta").value;
     let direccion = document.getElementById("direccarpeta").value;
-    Alumnos.buscarinde(usuario, Alumnos.raiz, NombreCarpe, direccion);
+    // let nombr = Alumnos.buscarinde(usuario, Alumnos.raiz, NombreCarpe, direccion)
+    const fecha = fechaActual.toLocaleDateString();
+    const hora = fechaActual.toLocaleTimeString();
+    //var nuevo = new Usuario(usuarioob.nombre, usuarioob.carnet, usuarioob.password, usuarioob.carpeta_raiz);
+    let nombr = usuarioacti.getindex(NombreCarpe, direccion);
+    //nuevo.getindex();
+    var nuevo = new Bitacora(usuario, "Se creo carpeta " + nombr, fecha, hora);
+    usuarioacti.InsertarCir(nuevo);
     alert("Carpeta creada exitosamente");
-    let text = Alumnos.getHTMLInde(usuario, Alumnos.raiz, direccion);
+    let text = usuarioacti.getHTMLInde(direccion);
     document.getElementById("areadecarp").innerHTML = text;
     document.getElementById("nomcarpeta").value = "";
 }
@@ -138,9 +153,13 @@ function CrearCarpeta() {
 function EliminarCarpeta() {
     let NombreCarpe = document.getElementById("nomcarpeta").value;
     let direccion = document.getElementById("direccarpeta").value;
-    Alumnos.eliminde(usuario, Alumnos.raiz, NombreCarpe, direccion);
+    usuarioacti.eliminde(NombreCarpe, direccion);
+    const fecha = fechaActual.toLocaleDateString();
+    const hora = fechaActual.toLocaleTimeString();
+    var nuevo = new Bitacora(usuario, "Se elimino carpeta " + NombreCarpe, fecha, hora);
+    usuarioacti.InsertarCir(nuevo);
     alert("Carpeta eliminada exitosamente");
-    let text = Alumnos.getHTMLInde(usuario, Alumnos.raiz, direccion);
+    let text = usuarioacti.getHTMLInde(direccion);
     document.getElementById("areadecarp").innerHTML = text;
     document.getElementById("nomcarpeta").value = "";
 }
@@ -154,7 +173,7 @@ function EntrarCarpeta(NombreFolder) {
 
 function BuscarCarpeta() {
     let direccion = document.getElementById("direccarpeta").value;
-    let resp = Alumnos.buscacar(usuario, Alumnos.raiz, direccion);
+    let resp = usuarioacti.buscacar(direccion);
     if (resp == null) {
         alert("El directorio no es valido")
     } else {
@@ -165,7 +184,7 @@ function BuscarCarpeta() {
 
 function RetornarInicio() {
     document.getElementById("direccarpeta").value = "/";
-    let text = Alumnos.getHTMLInde(usuario, Alumnos.raiz, "/");
+    let text = usuarioacti.getHTMLInde("/");
     document.getElementById("areadecarp").innerHTML = text;
 }
 
@@ -173,10 +192,10 @@ function GrafiInde() {
     document.getElementById("Visua1").style.display = "block"
     if (Alumnos.raiz != null) {
         let url = 'https://quickchart.io/graphviz?graph=';
-        let body = `digraph G {\n node [shape = record, style=filled,fillcolor=lightpink, penwidth=3];\n  ${Alumnos.GrafiInde(usuario, Alumnos.raiz)} }`
+        let body = `digraph G {\n node [shape = record, style=filled,fillcolor=lightpink, penwidth=3];\n  ${usuarioacti.GrafiInde()} }`
         $("#graph1").attr("src", url + body);
         console.log(url + body)
-        localusua = Alumnos.ObteLocalInde(usuario, Alumnos.raiz);
+        localusua = usuarioacti.ObteLocalInde();
         let nombre = "ArbolInde" + usuario;
         localStorage.setItem(nombre, JSON.stringify(localusua));
     } else {
@@ -185,16 +204,73 @@ function GrafiInde() {
 }
 
 function VerLocalArbolInde() {
-    let res = Alumnos.ObteLocalIndeGet(usuario, Alumnos.raiz)
+    let res = usuarioacti.ObteLocalIndeGet(usuario);
     if (res == "realizado") {
         let direccion = document.getElementById("direccarpeta").value;
-        let text1 = Alumnos.getHTMLInde(usuario, Alumnos.raiz, direccion);
+        let text1 = usuarioacti.getHTMLInde(direccion);
         document.getElementById("areadecarp").innerHTML = text1;
     }
 }
 
 function BorrarLocal() {
     localStorage.clear()
+}
+
+const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+});
+
+const SubirArchivo = async(e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const form = Object.fromEntries(formData);
+    // console.log(form.file.type);
+    let path = $('#path').val();
+    if (form.file.type === 'text/plain') {
+        // ARCHIVO DE TEXTO
+        let fr = new FileReader();
+        fr.readAsText(form.file);
+        fr.onload = () => {
+            // CARGAR ARCHIVO A LA MATRIZ
+            tree.getFolder(path).files.push({
+                name: form.fileName,
+                content: fr.result,
+                type: form.file.type
+            })
+            $('#carpetas').html(tree.getHTML(path));
+        };
+    } else {
+        // IMÁGENES O PDF 
+        let parseBase64 = await toBase64(form.file);
+        tree.getFolder(path).files.push({
+            name: form.fileName,
+            content: parseBase64,
+            type: form.file.type
+        })
+        $('#carpetas').html(tree.getHTML(path));
+        // console.log(parseBase64)
+        // $("#imagenSubida").attr("src", imgBase64); 
+        // console.log(await toBase64(form.file));
+    }
+    alert('Archivo Subido!')
+
+}
+
+function GrafiBita() {
+    document.getElementById("Visua2").style.display = "block"
+    let url = 'https://quickchart.io/graphviz?graph=';
+    let body = usuarioacti.Graficir();
+    $("#graph2").attr("src", url + body);
+    console.log(url + body)
+        //localStorage.setItem("Bitacora", JSON.stringify(bita));
+}
+
+function VerLocalBitacora() {
+    let temp = localStorage.getItem("Bitacora");
+    bita = JSON.parse(temp);
 }
 
 $(document).ready(VerLocalCargaMasiva);

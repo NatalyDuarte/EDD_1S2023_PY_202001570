@@ -4,7 +4,7 @@ class NAnode {
         this.files = [];
         this.ArchivosDFold = [];
         this.id = null;
-        //this.matriz = new Dispersa();
+        this.matriz = new Dispersa();
     }
 }
 class ArbolIndexado {
@@ -12,6 +12,10 @@ class ArbolIndexado {
         this.raiz = new NAnode('/');
         this.raiz.id = 0;
         this.size = 1;
+    }
+
+    InsertarMatriz(valor, cordex, cordey) {
+
     }
 
     InsertarCa(NombreFolder, indice) {
@@ -89,6 +93,7 @@ class ArbolIndexado {
     getHTML(ruta) {
         let node = this.ObtFolder(ruta);
         let code = "";
+        console.log(node.ArchivosDFold)
         node.ArchivosDFold.map(child => {
             code += ` <div class="col-2 folder" onclick="EntrarCarpeta('${child.NombreFolder}')">
                         <img src="../EDD_Proyecto1_Fase2/img/carpeta.png" width="100%"/>
