@@ -273,4 +273,15 @@ function VerLocalBitacora() {
     bita = JSON.parse(temp);
 }
 
+function CerrarUsua() {
+    alert("Cerrando Sesion Usuario....")
+    document.getElementById("HomePag").style.display = "block";
+    document.getElementById("UsuaPag").style.display = "none";
+    window.location.href = "#page-top";
+    $("#graph1").attr("src", " ");
+    $("#graph2").attr("src", " ");
+    usuarioacti = " ";
+    usuarioob = " ";
+}
+
 $(document).ready(VerLocalCargaMasiva);
