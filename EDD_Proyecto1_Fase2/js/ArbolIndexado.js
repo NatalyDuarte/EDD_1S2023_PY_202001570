@@ -14,12 +14,9 @@ class ArbolIndexado {
         this.size = 1;
     }
 
-    InsertarMatriz(valor, cordex, cordey) {
-
-    }
-
     InsertarCa(NombreFolder, indice) {
         let indicenodo = this.ObtFolder(indice);
+        console.log(indicenodo.matriz)
         if (indicenodo) {
             this.size += 1;
             let res = indicenodo.ArchivosDFold.find(child => child.NombreFolder == NombreFolder);

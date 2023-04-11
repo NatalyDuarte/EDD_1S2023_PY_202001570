@@ -104,6 +104,7 @@ class Usuaob {
                 content: resu,
                 type: types
             })
+            nodo.matriz.addDispersa(names, contax, 0);
             return names;
         } else {
             let nombre = "Copia " + names;
@@ -112,7 +113,19 @@ class Usuaob {
                 content: resu,
                 type: types
             })
+            nodo.matriz.addDispersa(nombre, contax, 0);
             return "Copia " + names;
         }
+    }
+    GrafiMatri(direccion) {
+        let nodo = this.arbolinde.ObtFolder(direccion)
+        if (nodo.files.length == 0) {
+            alert("No se puede mostrar la grafica porque no hay archivos");
+        } else {
+            nodo.matriz.graficarDispersa();
+        }
+    }
+    InsertarMatri() {
+
     }
 }

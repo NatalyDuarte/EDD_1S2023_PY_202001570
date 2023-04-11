@@ -6,6 +6,8 @@ let usuarioob;
 let fechaActual = new Date();
 let usuarioacti;
 let selpermisos;
+let contax = 0;
+let contay = 0;
 
 $('#label-in').on('click', function() {
     $('#subiarchi').trigger('click');
@@ -230,25 +232,49 @@ const SubirArchivo = async(e) => {
     const formData = new FormData(e.target);
     const form = Object.fromEntries(formData);
     let direccion = document.getElementById("direccarpeta").value;
+    let nombe = "";
+    let nodo = usuarioacti.arbolinde.ObtFolder(direccion)
+    console.log(nodo.matriz)
+    if (nodo.files.length == 1) {
+        let temp = new Dispersa();
+        console.log(nodo.matriz.fila)
+        temp.fila = nodo.matriz.fila;
+        temp.columna = nodo.matriz.columna;
+        nodo.matriz = temp;
+        nodo.matriz.addDispersa(direccion, 0, 0);
+        contax += 1
+        contay += 1
+        console.log(nodo.matriz)
+    }
     if (form.file.type === 'text/plain') {
         let fr = new FileReader();
         fr.readAsText(form.file);
         fr.onload = () => {
-            let nombe = usuarioacti.InsertarArchi(direccion, form.fileName, fr.result, form.file.type)
+            nombe = usuarioacti.InsertarArchi(direccion, form.fileName, fr.result, form.file.type)
             let text = usuarioacti.getHTMLInde(direccion);
             document.getElementById("areadecarp").innerHTML = text;
+            const fecha = fechaActual.toLocaleDateString();
+            const hora = fechaActual.toLocaleTimeString();
             var nuevo = new Bitacora(usuario, "Se creo archivo " + nombe, fecha, hora);
             usuarioacti.InsertarCir(nuevo);
         };
     } else {
         let parseBase64 = await toBase64(form.file);
-        let nombe = usuarioacti.InsertarArchi(direccion, form.fileName, parseBase64, form.file.type)
+        nombe = usuarioacti.InsertarArchi(direccion, form.fileName, parseBase64, form.file.type)
         let text = usuarioacti.getHTMLInde(direccion);
         document.getElementById("areadecarp").innerHTML = text;
+        const fecha = fechaActual.toLocaleDateString();
+        const hora = fechaActual.toLocaleTimeString();
         var nuevo = new Bitacora(usuario, "Se creo archivo " + nombe, fecha, hora);
         usuarioacti.InsertarCir(nuevo);
     }
     alert('Archivo Subido!')
+}
+
+function GenePermisos() {
+    var permisoscarne = document.getElementById("fileCarne").value;
+    var nombrearchi = document.getElementById("fileName").value;
+    usuarioacti.InsertarMatri();
 }
 
 function GrafiBita() {
@@ -286,6 +312,23 @@ function ObtenerSelePermisos() {
         selpermisos = "r"
     } else if (sele == "Escribir") {
         selpermisos = "w"
+    }
+}
+
+function GrafiMatri() {
+    document.getElementById("Visua3").style.display = "block";
+    let direccion = document.getElementById("direccarpeta").value;
+    if (Alumnos.raiz != null) {
+        let url = 'https://quickchart.io/graphviz?graph=';
+        let body = usuarioacti.GrafiMatri(direccion);
+        $("#graph3").attr("src", url + body);
+        console.log(url + body)
+            /*
+            localusua = usuarioacti.ObteLocalMatri();
+            let nombre = "Matri" + direccion;
+            localStorage.setItem(nombre, JSON.stringify(localusua));*/
+    } else {
+        alert("¡ NO HAY DATOS !")
     }
 }
 
