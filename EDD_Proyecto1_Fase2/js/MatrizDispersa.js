@@ -85,13 +85,12 @@ class Matrix {
 
     }
 
-    insertar(mont, day, song, artist) {
+    insertar(nombrearchi, carnet, permiso) {
+        let newCell = new NodoMatriz(nombrearchi, carnet, permiso);
 
-        let newCell = new NodoMatriz(mont, day, song, artist);
-
-        let columna = this.colList.getHeader(day);
+        let columna = this.colList.getHeader(nombrearchi);
         if (columna == null) {
-            columna = new NodoHeader(day);
+            columna = new NodoHeader(nombrearchi);
             this.colList.setNode(columna);
             columna.acces = newCell;
         } else if (mont < columna.acces.mont) {

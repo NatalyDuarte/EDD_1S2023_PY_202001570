@@ -233,7 +233,7 @@ const SubirArchivo = async(e) => {
     const form = Object.fromEntries(formData);
     let direccion = document.getElementById("direccarpeta").value;
     let nombe = "";
-    let nodo = usuarioacti.arbolinde.ObtFolder(direccion)
+    /*let nodo = usuarioacti.arbolinde.ObtFolder(direccion)
     console.log(nodo.matriz)
     if (nodo.files.length == 1) {
         let temp = new Dispersa();
@@ -245,7 +245,7 @@ const SubirArchivo = async(e) => {
         contax += 1
         contay += 1
         console.log(nodo.matriz)
-    }
+    }*/
     if (form.file.type === 'text/plain') {
         let fr = new FileReader();
         fr.readAsText(form.file);
@@ -274,7 +274,7 @@ const SubirArchivo = async(e) => {
 function GenePermisos() {
     var permisoscarne = document.getElementById("fileCarne").value;
     var nombrearchi = document.getElementById("fileName").value;
-    usuarioacti.InsertarMatri();
+    alert("Se genero permiso: " + selpermisos + " al carnet: " + permisoscarne + " del archivo: " + nombrearchi)
 }
 
 function GrafiBita() {

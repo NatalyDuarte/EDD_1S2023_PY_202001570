@@ -100,20 +100,20 @@ class Usuaob {
         let res = nodo.files.find(child => child.name == names);
         if (typeof res == 'undefined' || res == null) {
             nodo.files.push({
-                name: names,
-                content: resu,
-                type: types
-            })
-            nodo.matriz.addDispersa(names, contax, 0);
+                    name: names,
+                    content: resu,
+                    type: types
+                })
+                //nodo.matriz.addDispersa(names, contax, 0);
             return names;
         } else {
             let nombre = "Copia " + names;
             nodo.files.push({
-                name: nombre,
-                content: resu,
-                type: types
-            })
-            nodo.matriz.addDispersa(nombre, contax, 0);
+                    name: nombre,
+                    content: resu,
+                    type: types
+                })
+                //nodo.matriz.addDispersa(nombre, contax, 0);
             return "Copia " + names;
         }
     }

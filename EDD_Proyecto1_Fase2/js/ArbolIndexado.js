@@ -4,7 +4,7 @@ class NAnode {
         this.files = [];
         this.ArchivosDFold = [];
         this.id = null;
-        this.matriz = new Dispersa();
+        this.matriz = new Matrix();
     }
 }
 class ArbolIndexado {
