@@ -5,6 +5,7 @@ let localusua;
 let usuarioob;
 let fechaActual = new Date();
 let usuarioacti;
+let selpermisos;
 
 $('#label-in').on('click', function() {
     $('#subiarchi').trigger('click');
@@ -168,7 +169,8 @@ function EntrarCarpeta(NombreFolder) {
     let direccion = document.getElementById("direccarpeta").value;
     let direcam = direccion == '/' ? direccion + NombreFolder : direccion + "/" + NombreFolder;
     document.getElementById("direccarpeta").value = direcam;
-    document.getElementById("areadecarp").innerHTML = direcam;
+    let text = usuarioacti.getHTMLInde(direcam);
+    document.getElementById("areadecarp").innerHTML = text;
 }
 
 function BuscarCarpeta() {
@@ -227,36 +229,26 @@ const SubirArchivo = async(e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const form = Object.fromEntries(formData);
-    // console.log(form.file.type);
-    let path = $('#path').val();
+    let direccion = document.getElementById("direccarpeta").value;
     if (form.file.type === 'text/plain') {
-        // ARCHIVO DE TEXTO
         let fr = new FileReader();
         fr.readAsText(form.file);
         fr.onload = () => {
-            // CARGAR ARCHIVO A LA MATRIZ
-            tree.getFolder(path).files.push({
-                name: form.fileName,
-                content: fr.result,
-                type: form.file.type
-            })
-            $('#carpetas').html(tree.getHTML(path));
+            let nombe = usuarioacti.InsertarArchi(direccion, form.fileName, fr.result, form.file.type)
+            let text = usuarioacti.getHTMLInde(direccion);
+            document.getElementById("areadecarp").innerHTML = text;
+            var nuevo = new Bitacora(usuario, "Se creo archivo " + nombe, fecha, hora);
+            usuarioacti.InsertarCir(nuevo);
         };
     } else {
-        // IMÁGENES O PDF 
         let parseBase64 = await toBase64(form.file);
-        tree.getFolder(path).files.push({
-            name: form.fileName,
-            content: parseBase64,
-            type: form.file.type
-        })
-        $('#carpetas').html(tree.getHTML(path));
-        // console.log(parseBase64)
-        // $("#imagenSubida").attr("src", imgBase64); 
-        // console.log(await toBase64(form.file));
+        let nombe = usuarioacti.InsertarArchi(direccion, form.fileName, parseBase64, form.file.type)
+        let text = usuarioacti.getHTMLInde(direccion);
+        document.getElementById("areadecarp").innerHTML = text;
+        var nuevo = new Bitacora(usuario, "Se creo archivo " + nombe, fecha, hora);
+        usuarioacti.InsertarCir(nuevo);
     }
     alert('Archivo Subido!')
-
 }
 
 function GrafiBita() {
@@ -282,6 +274,19 @@ function CerrarUsua() {
     $("#graph2").attr("src", " ");
     usuarioacti = " ";
     usuarioob = " ";
+}
+
+function ObtenerSelePermisos() {
+    var sele = document.getElementById("selComboper").value;
+    if (sele == "Ning") {
+        selpermisos = " "
+    } else if (sele == "LosDos") {
+        selpermisos = "r-w"
+    } else if (sele == "Leer") {
+        selpermisos = "r"
+    } else if (sele == "Escribir") {
+        selpermisos = "w"
+    }
 }
 
 $(document).ready(VerLocalCargaMasiva);

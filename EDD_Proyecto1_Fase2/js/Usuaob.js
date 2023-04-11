@@ -95,5 +95,24 @@ class Usuaob {
         this.arbolinde.raiz = JSON.parse(temp).raiz;
         return "realizado";
     }
-
+    InsertarArchi(direccion, names, resu, types) {
+        let nodo = this.arbolinde.ObtFolder(direccion)
+        let res = nodo.files.find(child => child.name == names);
+        if (typeof res == 'undefined' || res == null) {
+            nodo.files.push({
+                name: names,
+                content: resu,
+                type: types
+            })
+            return names;
+        } else {
+            let nombre = "Copia " + names;
+            nodo.files.push({
+                name: nombre,
+                content: resu,
+                type: types
+            })
+            return "Copia " + names;
+        }
+    }
 }

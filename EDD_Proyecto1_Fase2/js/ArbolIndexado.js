@@ -100,6 +100,31 @@ class ArbolIndexado {
                         <p class="h6 text-center">${child.NombreFolder}</p>
                     </div>`
         })
+        node.files.map(file => {
+            if (file.type === 'text/plain') {
+                let archivo = new Blob([file.content], { type: file.type });
+                const url = URL.createObjectURL(archivo);
+                code += `
+                        <div class="col-2 folder">
+                        <img src="../EDD_Proyecto1_Fase2/img/archivo.png" width="100%"/>
+                        <p class="h6 text-center">
+                            <a href="${url}" download>
+                                ${file.name}
+                            </a>
+                        </p>
+                    </div>
+                `
+            } else {
+                code += ` <div class="col-2 folder">
+                        <img src="../EDD_Proyecto1_Fase2/img/archivo.png" width="100%"/>
+                        <p class="h6 text-center">
+                            <a href="${file.content}" download>
+                                ${file.name}
+                            </a>
+                        </p>
+                    </div>`
+            }
+        })
         return code;
     }
 

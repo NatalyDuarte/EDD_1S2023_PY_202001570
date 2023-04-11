@@ -223,8 +223,17 @@
                                 <br><br>
                                 <form class="form" onsubmit="SubirArchivo(event)">
                                     <input type="text" id="fileName" name="fileName" class="form-control mb-4" placeholder="Nombre de Archivos" />
+                                    <input type="text" id="fileCarne" name="fileCarne" class="form-control mb-4" placeholder="Carnet para Permisos" />
+                                    <SELECT NAME="selComboper" SIZE=1 id="selComboper" onchange="ObtenerSelePermisos();"> 
+                                        <OPTION VALUE="Ning">ninguna</OPTION>
+                                        <OPTION VALUE="LosDos">r-w</OPTION>
+                                        <OPTION VALUE="Leer">r</OPTION>
+                                        <OPTION VALUE="Escribir">w</OPTION>
+                                    </SELECT>
                                     <input type="file" id="file" name="file" class="form-control" accept="application/pdf, .txt, image/*">
-                                    <a class="btn btn-primary  rounded-pill " id="label-in"><img src="../EDD_Proyecto1_Fase2/img/subirarch.png" height="50" width="50">SUBIR ARCHIVOS</a>
+                                    <div class="form-group mt-4">
+                                        <button type="submit" class="btn btn-primary w-100">Subir Archivo</button>
+                                    </div>
                                 </form>
                             </center>
 
