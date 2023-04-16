@@ -233,19 +233,6 @@ const SubirArchivo = async(e) => {
     const form = Object.fromEntries(formData);
     let direccion = document.getElementById("direccarpeta").value;
     let nombe = "";
-    /*let nodo = usuarioacti.arbolinde.ObtFolder(direccion)
-    console.log(nodo.matriz)
-    if (nodo.files.length == 1) {
-        let temp = new Dispersa();
-        console.log(nodo.matriz.fila)
-        temp.fila = nodo.matriz.fila;
-        temp.columna = nodo.matriz.columna;
-        nodo.matriz = temp;
-        nodo.matriz.addDispersa(direccion, 0, 0);
-        contax += 1
-        contay += 1
-        console.log(nodo.matriz)
-    }*/
     if (form.file.type === 'text/plain') {
         let fr = new FileReader();
         fr.readAsText(form.file);
@@ -272,9 +259,11 @@ const SubirArchivo = async(e) => {
 }
 
 function GenePermisos() {
+    let direccion = document.getElementById("direccarpeta").value;
     var permisoscarne = document.getElementById("fileCarne").value;
     var nombrearchi = document.getElementById("fileName").value;
     alert("Se genero permiso: " + selpermisos + " al carnet: " + permisoscarne + " del archivo: " + nombrearchi)
+    usuarioacti.InsertarMatri(direccion, nombrearchi, permisoscarne, selpermisos);
 }
 
 function GrafiBita() {
@@ -298,6 +287,11 @@ function CerrarUsua() {
     window.location.href = "#page-top";
     $("#graph1").attr("src", " ");
     $("#graph2").attr("src", " ");
+    $("#graph3").attr("src", " ");
+    document.getElementById("fileName").value = " ";
+    document.getElementById("file").value = " ";
+    document.getElementById("fileCarne").value = " ";
+    selpermisos = " ";
     usuarioacti = " ";
     usuarioob = " ";
 }
@@ -330,6 +324,10 @@ function GrafiMatri() {
     } else {
         alert("¡ NO HAY DATOS !")
     }
+}
+
+function VerLocalMatri() {
+    usuarioacti.ObteLocalMatriGet(usuario);
 }
 
 $(document).ready(VerLocalCargaMasiva);

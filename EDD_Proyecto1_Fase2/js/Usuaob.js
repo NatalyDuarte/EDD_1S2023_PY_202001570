@@ -63,6 +63,7 @@ class Usuaob {
         this.carpeta_raiz = carpeta_raiz
         this.arbolinde = new ArbolIndexado();
         this.bitacora = new ListaCircularC();
+        this.matriz = new Matrix();
     }
 
     InsertarCir(nuevo) {
@@ -100,32 +101,48 @@ class Usuaob {
         let res = nodo.files.find(child => child.name == names);
         if (typeof res == 'undefined' || res == null) {
             nodo.files.push({
-                    name: names,
-                    content: resu,
-                    type: types
-                })
-                //nodo.matriz.addDispersa(names, contax, 0);
+                name: names,
+                content: resu,
+                type: types
+            })
             return names;
         } else {
             let nombre = "Copia " + names;
             nodo.files.push({
-                    name: nombre,
-                    content: resu,
-                    type: types
-                })
-                //nodo.matriz.addDispersa(nombre, contax, 0);
+                name: nombre,
+                content: resu,
+                type: types
+            })
             return "Copia " + names;
         }
     }
     GrafiMatri(direccion) {
-        let nodo = this.arbolinde.ObtFolder(direccion)
-        if (nodo.files.length == 0) {
-            alert("No se puede mostrar la grafica porque no hay archivos");
+        let indicenodo = this.arbolinde.ObtFolder(direccion);
+        if (indicenodo) {
+            if (!indicenodo.files.length) { alert("No se puede crear la grafica de la matriz por falta de archivos") } else {
+                return this.matriz.grapMatrizG(direccion);
+            }
         } else {
-            nodo.matriz.graficarDispersa();
+            alert("No existe esa ruta");
         }
     }
-    InsertarMatri() {
-
+    InsertarMatri(indice, nombrearchi, permisoscarne, selpermisos) {
+        let indicenodo = this.arbolinde.ObtFolder(indice);
+        if (indicenodo) {
+            if (!indicenodo.files.length) { alert("No se puede crear la matriz por falta de archivos") } else {
+                this.matriz.insertar(nombrearchi, permisoscarne, selpermisos)
+            }
+        } else {
+            alert("No existe esa ruta");
+        }
+    }
+    ObteLocalMatri() {
+        return this.matriz;
+    }
+    ObteLocalMatriGet(usuario) {
+        let nombre = "Matri" + usuario;
+        let temp = localStorage.getItem(nombre);
+        this.matriz = JSON.parse(temp);
+        return "realizado";
     }
 }

@@ -3,8 +3,8 @@ class NAnode {
         this.NombreFolder = NombreFolder;
         this.files = [];
         this.ArchivosDFold = [];
-        this.id = null;
         this.matriz = new Matrix();
+        this.id = null;
     }
 }
 class ArbolIndexado {

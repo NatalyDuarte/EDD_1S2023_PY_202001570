@@ -1,8 +1,8 @@
 class NodoMatriz {
-    constructor(nombrearchi, carnet, permiso) {
-        this.nombrearchi = nombrearchi
+    constructor(archivo, carnet, permisos) {
+        this.archivo = archivo
         this.carnet = carnet
-        this.permiso = permiso
+        this.permisos = permisos
 
         this.nextNode = null
         this.previusNode = null
@@ -64,9 +64,9 @@ class Headers {
             }
         }
     }
-    insertMont(mont) {
+    insertarchivo(archivo) {
         this.size++
-            let newNodo = new NodoHeader(mont)
+            let newNodo = new NodoHeader(archivo)
         if (this.rootNode == null) {
             this.rootNode = newNodo
             this.endNode = newNodo
@@ -85,68 +85,67 @@ class Matrix {
 
     }
 
-    insertar(nombrearchi, carnet, permiso) {
-        let newCell = new NodoMatriz(nombrearchi, carnet, permiso);
+    insertar(archivo, carnet, permisos) {
 
-        let columna = this.colList.getHeader(nombrearchi);
+        let newCell = new NodoMatriz(archivo, carnet, permisos);
+
+        let columna = this.colList.getHeader(carnet);
         if (columna == null) {
-            columna = new NodoHeader(nombrearchi);
+            columna = new NodoHeader(carnet);
             this.colList.setNode(columna);
             columna.acces = newCell;
-        } else if (mont < columna.acces.mont) {
+        } else if (archivo < columna.acces.archivo) {
             newCell.downNode = columna.acces;
             columna.acces.upNode = newCell;
             columna.acces = newCell;
         } else {
             let tmp = columna.acces;
             while (tmp.downNode != null) {
-                if (newCell.mont < tmp.downNode.mont) {
+                if (newCell.archivo < tmp.downNode.archivo) {
                     newCell.downNode = tmp.downNode;
                     tmp.downNode.upNode = newCell;
                     newCell.upNode = tmp;
                     tmp.downNode = newCell
                     break;
-                } else if (newCell.mont === tmp.downNode.mont && newCell.day === tmp.downNode.day) {
-                    tmp.downNode.song = newCell.song;
-                    tmp.downNode.artist = newCell.artist;
+                } else if (newCell.archivo === tmp.downNode.archivo && newCell.carnet === tmp.downNode.carnet) {
+                    tmp.downNode.permisos = newCell.permisos;
                     break
                 }
                 tmp = tmp.downNode
             }
-            if (day == tmp.day && mont == tmp.mont) {
+            if (carnet == tmp.carnet && archivo == tmp.archivo) {
                 console.log("igual")
-                tmp.song = newCell.song;
-                tmp.artist = newCell.artist;
+                tmp.permisos = newCell.permisos;
             } else if (tmp.downNode == null) {
                 tmp.downNode = newCell;
                 newCell.upNode = tmp;
             }
         }
 
-        let row = this.rowList.getHeader(mont);
+        let row = this.rowList.getHeader(archivo);
         if (row == null) {
-            row = new NodoHeader(mont);
+            row = new NodoHeader(archivo);
             this.rowList.setNode(row);
             row.acces = newCell;
-        } else if (day < row.acces.day) {
+        } else if (carnet < row.acces.carnet) {
             newCell.nextNode = row.acces;
             row.acces.previusNode = newCell;
             row.acces = newCell;
         } else {
             let tmp = row.acces;
             while (tmp.nextNode != null) {
-                if (day < tmp.nextNode.day) {
+                if (carnet < tmp.nextNode.carnet) {
                     newCell.nextNode = tmp.nextNode;
                     tmp.nextNode.previusNode = newCell;
                     tmp.nextNode = newCell;
                     newCell.previusNode = tmp;
                     break
-                } else if (newCell.day === tmp.nextNode.day && newCell.mont === tmp.nextNode.mont) {
+                } else if (newCell.carnet === tmp.nextNode.carnet && newCell.archivo === tmp.nextNode.archivo) {
                     break
                 }
                 tmp = tmp.nextNode;
             }
-            if (newCell.day === tmp.day && newCell.mont === tmp.mont) {
+            if (newCell.carnet === tmp.carnet && newCell.archivo === tmp.archivo) {
                 console.log("igual")
             } else if (tmp.nextNode == null) {
                 tmp.nextNode = newCell
@@ -155,10 +154,10 @@ class Matrix {
         }
     }
 
-    grapMatrizG() {
+    grapMatrizG(direccion) {
         let cadena = "";
         cadena += "digraph G{\n node[shape=box style=filled];\n" + "subgraph cluster_p{\n";
-        cadena += 'label = "Musica Programada"' + 'edge[dir = "both"];\n';
+        cadena += 'label = "' + direccion + '"' + 'edge[dir = "both"];\n';
 
         cadena += this.renderNodes();
 
@@ -179,7 +178,7 @@ class Matrix {
     nodoX() {
         let tmp = ""
         let aux = this.colList.rootNode
-        tmp += "Mt -> C"
+        tmp += "Carpeta -> C"
         tmp += aux.pos;
         tmp += ";\n"
 
@@ -201,7 +200,7 @@ class Matrix {
         }
 
         aux = this.colList.rootNode;
-        tmp += "{ rank = same; Mt; ";
+        tmp += "{ rank = same; Carpeta; ";
 
         while (aux != null) {
             tmp += "C";
@@ -218,7 +217,7 @@ class Matrix {
         let tmp = "";
 
         let aux = this.rowList.rootNode;
-        tmp += "Mt -> F";
+        tmp += "Carpeta -> F";
         tmp += aux.pos;
         tmp += ";\n";
 
@@ -247,13 +246,13 @@ class Matrix {
             let aux = auxc.acces;
             while (aux != null) {
                 tmp += "X";
-                tmp += aux.mont;
+                tmp += aux.archivo;
                 tmp += "Y";
-                tmp += aux.day;
+                tmp += aux.carnet;
                 tmp += '[label="';
-                tmp += aux.song + ",\\n " + aux.artist + '",';
+                tmp += aux.permisos + ",\\n " + '"';
                 tmp += 'group=';
-                tmp += aux.day;
+                tmp += aux.carnet;
                 tmp += "];\n";
 
                 aux = aux.downNode;
@@ -274,23 +273,23 @@ class Matrix {
                 tmp += auxc.pos;
                 tmp += " -> ";
                 tmp += "X";
-                tmp += auxc.acces.mont;
+                tmp += auxc.acces.archivo;
                 tmp += "Y";
-                tmp += auxc.acces.day;
+                tmp += auxc.acces.carnet;
                 tmp += ";\n";
             }
             let aux = auxc.acces;
             while (aux.downNode != null) {
                 if (aux.downNode != null) {
                     tmp2 += "X";
-                    tmp2 += aux.mont;
+                    tmp2 += aux.archivo;
                     tmp2 += "Y";
-                    tmp2 += aux.day;
+                    tmp2 += aux.carnet;
                     tmp2 += " -> ";
                     tmp2 += "X";
-                    tmp2 += aux.downNode.mont;
+                    tmp2 += aux.downNode.archivo;
                     tmp2 += "Y";
-                    tmp2 += aux.downNode.day;
+                    tmp2 += aux.downNode.carnet;
                     tmp2 += ";\n";
                 }
                 aux = aux.downNode
@@ -311,23 +310,23 @@ class Matrix {
                 tmp += auxr.pos;
                 tmp += " -> ";
                 tmp += "X";
-                tmp += auxr.acces.mont;
+                tmp += auxr.acces.archivo;
                 tmp += "Y";
-                tmp += auxr.acces.day;
+                tmp += auxr.acces.carnet;
                 tmp += ";\n";
             }
             let aux = auxr.acces;
             while (aux != null) {
                 if (aux.nextNode != null) {
                     tmp2 += "X";
-                    tmp2 += aux.mont;
+                    tmp2 += aux.archivo;
                     tmp2 += "Y";
-                    tmp2 += aux.day;
+                    tmp2 += aux.carnet;
                     tmp2 += " -> ";
                     tmp2 += "X";
-                    tmp2 += aux.nextNode.mont;
+                    tmp2 += aux.nextNode.archivo;
                     tmp2 += "Y";
-                    tmp2 += aux.nextNode.day;
+                    tmp2 += aux.nextNode.carnet;
                     tmp2 += ";\n";
                 }
                 aux = aux.nextNode
@@ -355,9 +354,9 @@ class Matrix {
             let aux = auxr.acces;
             while (aux != null) {
                 tmp += "X";
-                tmp += aux.mont;
+                tmp += aux.archivo;
                 tmp += "Y";
-                tmp += aux.day;
+                tmp += aux.carnet;
                 tmp += ";";
 
                 aux = aux.nextNode;
@@ -367,29 +366,5 @@ class Matrix {
             auxr = auxr.nextNode;
         }
         return tmp.toString();
-    }
-
-    generarHTML() {
-        let cadena = ""
-        let tmp = this.rowList.rootNode;
-        while (tmp != null) {
-            let tmp2 = tmp.acces;
-            while (tmp2 != null) {
-                cadena += `
-                    <div class="col">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">Nombre: ${tmp2.song}</h5>
-                                <p class="card-text">Artist: ${tmp2.artist}</p>
-                                <p class="card-text">Dia: ${tmp2.day}, Mes: ${tmp2.mont}</p>
-                            </div>
-                            
-                        </div>
-                    </div>\n`
-                tmp2 = tmp2.nextNode;
-            }
-            tmp = tmp.nextNode;
-        }
-        return cadena;
     }
 }
