@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>GoDrive</title>
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
+</head>
+
+<body id="page-top">
+    <!-- PESTAÑA PRINCIPAL -->
+    <div id="HomePag" style="display: block;">
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+            <div class="container px-5">
+                <a class="navbar-brand" href="#page-top">GoDrive</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="#HomePag">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#InicioPag">Inicio Sesión</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <header class="masthead text-center text-white">
+            <div class="masthead-content">
+                <div class="container px-5">
+                    <h1 class="masthead-heading mb-0">GoDrive</h1>
+                    <h2>Bienvenido a la aplicación creada para el manejo de archivos para la Universidad de San Carlos de Guatemala de la facultad de Ingeniería</h2>
+                </div>
+            </div>
+            <div class="bg-circle-1 bg-circle"></div>
+            <div class="bg-circle-2 bg-circle"></div>
+            <div class="bg-circle-3 bg-circle"></div>
+        </header>
+        <section id="InicioPag">
+            <div class="container px-5">
+                <div class="row gx-7 align-items-center">
+                    <div class="col-lg-6 order-lg-1">
+                        <form>
+                            <br>
+                            <br>
+                            <br>
+                            <h2 class="display-4">Inicio Sesion</h2>
+                            <!-- Email input -->
+                            <div class="form-outline mb-4">
+                                <input type="text" id="user" class="form-control" />
+                                <label class="form-label" for="form2Example1">Carnet</label>
+                            </div>
+                            <!-- Password input -->
+                            <div class="form-outline mb-4">
+                                <input type="password" id="pass" class="form-control" />
+                                <label class="form-label" for="form2Example2">Contraseña</label><br>
+                            </div>
+                            <button id="log" type="button" class="btn btn-primary btn-block mb-4" onclick="Login()">Inicio</button>
+                        </form>
+                        <button type="button" class="btn btn-primary btn-block mb-4" onclick="BorrarLocal()">Borrar LocalStorage</button>
+                    </div>
+                </div>
+            </div>
+            <BR>
+            <BR>
+        </section>
+    </div>
+    <!-- DIV PARA EL ADMIN -->
+    <div id="AdminPag" style="display: none;">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+            <div class="container px-5">
+                <a class="navbar-brand" href="#page-top">GoDrive</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="#mostraravl">Mostrar Usuarios AVL</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#mostrar">Mostrar Usuarios</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#mostrarper">Mostrar Permisos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#cargam">Carga Masiva</a></li>
+                        <li class="nav-item">
+                            <CENTER><a class="btn btn-primary  rounded-pill " id="cerraadmi" onclick="CerrarAdmi()">SALIR</a></CENTER>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Header-->
+        <header class="masthead text-center text-white">
+            <div class="masthead-content">
+                <div class="container px-5">
+                    <h1 class="masthead-heading mb-0">ADMINISTRADOR</h1>
+                </div>
+            </div>
+            <div class="bg-circle-1 bg-circle"></div>
+            <div class="bg-circle-2 bg-circle"></div>
+            <div class="bg-circle-3 bg-circle"></div>
+        </header>
+        <br><br><br>
+        <section id="cargam">
+            <div class="container px-5">
+                <div class="row gx-5 align-items-center">
+                    <div class=" order-lg-1">
+                        <div class="p-2">
+                            <br><br><br><br>
+                            <h2 class="display-4">CARGA MASIVA</h2>
+                            <p><br>Se debe cargar un archivo con extensión JSON<br><br></p>
+                            <center>
+                                <div style="background-color: black; height: 260px; width: 600px; border-radius: 1rem;">
+                                    <br><br><br>
+                                    <form>
+                                        <p style="color: white;">
+                                            <h2 style="color: white;">Carga Estudiantes Por JSON:</h2> <br>
+                                            <input type="file" id="cargamasi" name="jsonsubida1" accept="JSON/json, .json, .JSON" style="color:white;"><br><br>
+                                            <a class="btn btn-primary  rounded-pill " onclick="CargaEstu()">Cargar</a>
+                                            <a class="btn btn-primary  rounded-pill " onclick="CargaTabla()">Pasar Datos a Tabla Hash</a>
+                                        </p>
+                                    </form>
+                                </div>
+                            </center>
+                            <br><br><br><br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="mostraravl">
+            <div class="container px-5">
+                <div class="row gx-5 align-items-center">
+                    <div class=" order-lg-1">
+                        <div class="p-2">
+                            <br><br><br><br>
+                            <h2 class="display-4">MOSTRAR ALUMNOS</h2>
+                            <SELECT NAME="selCombo" SIZE=1 id="selCombo" onchange="ObtenerSele();"> 
+                                <OPTION VALUE="In-Orden">In-Orden</OPTION>
+                                <OPTION VALUE="Post-Orden">Post-Orden</OPTION>
+                                <OPTION VALUE="Pre-Orden">Pre-Orden</OPTION>
+                            </SELECT>
+                            <div id="TablaInOrder" style="display: block;">
+                            </div>
+                            <div id="TablaPostOrder" style="display: none;">
+                            </div>
+                            <div id="TablaPreOrder" style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <section id="mostrar">
+            <div class="container px-5">
+                <div class="row gx-5 align-items-center">
+                    <div class=" order-lg-1">
+                        <div class="p-2">
+                            <br><br><br><br>
+                            <h2 class="display-4">Usuarios</h2>
+                            <div id="TablaUsua" style="display: block;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="mostrarper">
+            <div class="container px-5">
+                <div class="row gx-5 align-items-center">
+                    <div class=" order-lg-1">
+                        <div class="p-2">
+                            <br><br><br><br>
+                            <h2 class="display-4">Permisos</h2>
+                            <div id="TablaPermisos" style="display: block;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <br><br><br><br>
+    </div>
+    <!-- DIV PARA EL USUARIO -->
+    <div id="UsuaPag" style="display: none;">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+            <div class="container px-5">
+                <a class="navbar-brand" href="#page-top">GoDrive</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="#compartidos">Compartidos Conmigo</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#mensajeria">Mensajeria</a></li>
+                        <li class="nav-item">
+                            <CENTER><a class="btn btn-primary  rounded-pill " onclick="CerrarUsua()">CERRAR SESION</a></CENTER>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Header-->
+        <header class="masthead text-center text-white">
+            <div class="masthead-content">
+                <div id="nombreusua" class="container px-5">
+                </div>
+            </div>
+            <div class="bg-circle-1 bg-circle"></div>
+            <div class="bg-circle-2 bg-circle"></div>
+            <div class="bg-circle-3 bg-circle"></div>
+        </header>
+        <br><br><br>
+        <section id="vercargausua">
+            <div class="container px-5">
+                <div class="row gx-5 align-items-center">
+                    <div class=" order-lg-1">
+                        <div class="p-2">
+                            <br><br><br><br>
+                            <center>
+                                <div class="contai">
+                                    <input type="text" id="direccarpeta" value="/">
+                                    <div class="btn">
+                                        <i class="fa fa-search" onclick="BuscarCarpeta()"></i>
+                                    </div>
+                                    <a class="btn btn-primary  rounded-pill " onclick="RetornarInicio()">Inicio</a>
+                                </div>
+                                <div id="areadecarp">
+                                    <br><br><br>
+
+                                </div>
+                                <br>
+                                <input type="text" id="nomcarpeta" placeholder="Nombre Carpeta"><br><br>
+                                <a class="btn btn-primary  rounded-pill " onclick="CrearCarpeta()">CREAR CARPETA</a>
+                                <a class="btn btn-primary  rounded-pill " onclick="EliminarCarpeta()">ELIMINAR CARPETA</a>
+                                <br><br>
+                                <form class="form" onsubmit="SubirArchivo(event)">
+                                    <input type="text" id="fileName" name="fileName" class="form-control mb-4" placeholder="Nombre de Archivos" />
+                                    <input type="file" id="file" name="file" class="form-control" accept="application/pdf, .txt, image/*">
+                                    <div class="form-group mt-4">
+                                        <button type="submit" class="btn btn-primary w-100">Subir Archivo</button>
+                                    </div>
+                                </form>
+                                <br>
+                                <SELECT NAME="selCarnetPer" SIZE=1 id="selCarnetPer" onchange="ObtenerSeleCarPermisos();"></SELECT>
+                                <SELECT NAME="selComboper" SIZE=1 id="selComboper" onchange="ObtenerSelePermisos();"> 
+                                        <OPTION VALUE="LosDos">r-w</OPTION>
+                                        <OPTION VALUE="Leer">r</OPTION>
+                                        <OPTION VALUE="Escribir">w</OPTION>
+                                    </SELECT>
+                                <a class="btn btn-primary  rounded-pill " onclick="GenePermisos()">Dar Permisos</a>
+                            </center>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="compartidos">
+            <div class="container px-5">
+                <div class="row gx-5 align-items-center">
+                    <div class=" order-lg-1">
+                        <div class="p-2">
+                            <br><br><br><br>
+                            <h2 class="display-4">COMPARTIDOS CONMIGO</h2>
+                            <a class="btn btn-primary  rounded-pill " onclick="GrafCompartidos()">Visualizar</a>
+                            <div id="Visua1">
+                                <hr>
+                                <img id="graph1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="mensajeria">
+            <div class="container px-5">
+                <div class="row gx-5 align-items-center">
+                    <div class=" order-lg-1">
+                        <div class="p-2">
+                            <br><br><br><br>
+                            <h2 class="display-4">MENSAJERIA</h2>
+                            <br><br>
+                            <h3 class="display-4">Enviar Mensaje</h3>
+                            <SELECT NAME="selCarnetMen" SIZE=1 id="selCarnetMen" onchange="ObtenerSeleCarMen();"></SELECT>
+                            <div class="form-outline mb-4">
+                                <input type="password" id="pass" class="form-control" />
+                                <label class="form-label" for="form2Example2">Escribir Mensaje</label><br>
+                            </div>
+                            <a class="btn btn-primary  rounded-pill " onclick="EnviarMensaje()">Enviar Mensaje</a>
+                            <br><br>
+                            <h3 class="display-4">Mensajes Recibidos</h3>
+                            <div style="background-color: black; height: 260px; width: 600px; border-radius: 1rem;">
+                                <br><br><br>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- JQUERY -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <!-- Bootstrap -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+        <script src="js/Permisos.js" type="text/javascript"></script>
+        <script src="js/ArbolIndexado.js" type="text/javascript"></script>
+        <script src="js/crypto-js.js" type="text/javascript"></script>
+        <script src="js/sha256.js" type="text/javascript"></script>
+        <script src="js/TablaHash.js" type="text/javascript"></script>
+        <script src="js/ArbolAvl.js" type="text/javascript"></script>
+        <script src="js/Usuaob.js" type="text/javascript"></script>
+        <script src="js/Usuario.js" type="text/javascript"></script>
+        <script src="js/Main.js" type="text/javascript"></script>
+
+
+</body>
+
+</html>
