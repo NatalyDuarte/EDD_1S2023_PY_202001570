@@ -7,13 +7,6 @@ class Usuaob {
         this.arbolinde = new ArbolIndexado();
 
     }
-
-    InsertarCir(nuevo) {
-        return this.bitacora.InsertCir(nuevo);
-    }
-    Graficir() {
-        return this.bitacora.Grafici();
-    }
     getindex(NombreFolder, indice) {
         return this.arbolinde.InsertarCa(NombreFolder, indice);
     }
@@ -39,7 +32,7 @@ class Usuaob {
         return "realizado";
     }
     InsertarArchi(direccion, names, resu, types) {
-        let nodo = this.arbolinde.ObtFolder(direccion)
+        let { node: nodo, peso } = this.arbolinde.ObtFolder(direccion)
         let res = nodo.files.find(child => child.name == names);
         if (typeof res == 'undefined' || res == null) {
             nodo.files.push({
@@ -56,6 +49,23 @@ class Usuaob {
                 type: types
             })
             return "Copia " + names;
+        }
+    }
+    BuscarArchi(direccion, names) {
+        let { node: nodo, peso } = this.arbolinde.ObtFolder(direccion)
+        let code = "";
+        let res = nodo.files.find(child => child.name == names);
+        if (typeof res == 'undefined' || res == null) {
+            return "No se encontro archivo";
+        } else {
+            nodo.files.map(file => {
+                if (file.name == names) {
+                    return file;
+                } else {
+                    return "No se encontro archivo";
+                }
+
+            })
         }
     }
 }

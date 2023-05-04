@@ -10,6 +10,7 @@ let contay = 0;
 let permisoscarnet;
 let mensajecarnet;
 let sele = document.getElementById("selCombo").value;
+let BlockC = new BlockChain();
 $('#label-in').on('click', function() {
     $('#subiarchi').trigger('click');
 });
@@ -46,6 +47,12 @@ function Login() {
             let selec = Alumnos.grafEnOrdenSelect(Alumnos.raiz);
             $('#selCarnetPer').append(selec);
             $('#selCarnetMen').append(selec);
+            let encontrar = Permisos.Buscar(usuarioacti.carnet)
+            if (encontrar != "No Encontrado") {
+                console.log("Si tiene archivos compartidos")
+            } else {
+
+            }
         } else {
             document.getElementById("pass").value = "";
             alert("Contraseña Incorrecta")
@@ -193,12 +200,22 @@ const SubirArchivo = async(e) => {
         fr.readAsText(form.file);
         fr.onload = () => {
             nombe = usuarioacti.InsertarArchi(direccion, form.fileName, fr.result, form.file.type)
+            Permisos.files.push({
+                name: form.fileName,
+                content: fr.result,
+                type: form.file.type
+            })
             let text = usuarioacti.getHTMLInde(direccion);
             document.getElementById("areadecarp").innerHTML = text;
         };
     } else {
         let parseBase64 = await toBase64(form.file);
         nombe = usuarioacti.InsertarArchi(direccion, form.fileName, parseBase64, form.file.type)
+        Permisos.files.push({
+            name: form.fileName,
+            content: parseBase64,
+            type: form.file.type
+        })
         let text = usuarioacti.getHTMLInde(direccion);
         document.getElementById("areadecarp").innerHTML = text;
     }
@@ -216,6 +233,8 @@ function CerrarUsua() {
     document.getElementById("fileName").value = " ";
     document.getElementById("file").value = " ";
     document.getElementById("fileCarne").value = " ";
+    document.getElementById("AreaMensajes").value = " ";
+    document.getElementById("mensajetx").value = " ";
     selpermisos = " ";
     usuarioacti = " ";
     usuarioob = " ";
@@ -236,8 +255,9 @@ function ObtenerSeleCarPermisos() {
     permisoscarnet = document.getElementById("selCarnetPer").value;
 }
 
-function ObtenerSeleCarMen() {
+async function ObtenerSeleCarMen() {
     mensajecarnet = document.getElementById("selCarnetMen").value;
+    $('#AreaMensajes').html(await BlockC.ObMensajes(mensajecarnet, usuarioacti.carnet));
 }
 
 function VerLocalCargaMasiva() {
@@ -252,10 +272,81 @@ function VerLocalCargaMasiva() {
 function GenePermisos() {
     let direccion = document.getElementById("direccarpeta").value;
     var nombrearchi = document.getElementById("fileName").value;
-    alert("Se genero permiso: " + selpermisos + " al carnet: " + permisoscarnet + " del archivo: " + nombrearchi)
-    let nuevo = new Permi(usuarioacti.carnet, permisoscarnet, direccion, nombrearchi, selpermisos);
-    Permisos.InsertCir(nuevo);
+    let archivo = usuarioacti.BuscarArchi(direccion, nombrearchi);
+    if (archivo == "No se encontro archivo") {
+        alert("No se encontro archivo");
+    } else {
+        alert("Se genero permiso: " + selpermisos + " al carnet: " + permisoscarnet + " del archivo: " + nombrearchi)
+        let nuevo = new Permi(usuarioacti.carnet, permisoscarnet, direccion, nombrearchi, selpermisos);
+        Permisos.InsertCir(nuevo);
+    }
+
 }
 
+async function EnviarMensaje() {
+    if (usuarioacti.carnet && mensajecarnet) {
+        var mensaje = document.getElementById("mensajetx").value;
+        await BlockC.Insertar(usuarioacti.carnet, mensajecarnet, mensaje);
+        document.getElementById("mensajetx").value = " ";
+        alert("Mensaje enviado");
+        ObtenerSeleCarMen();
+    } else {
+        alert("No ha seleccionado Receptop o Emisor");
+    }
+}
+
+function ObBlockM(index) {
+    if (index === 0) {
+        let html = BlockC.GraficaBlockChain(index);
+        if (html) {
+            $('#show-block').html(html);
+        }
+    } else {
+        let currentBlock = Number($('#block-table').attr('name'));
+        if (index < 0) {
+            if (currentBlock - 1 < 0) {
+                alert("No existen elementos anteriores");
+            } else {
+                let html = BlockC.GraficaBlockChain(currentBlock - 1);
+                if (html) {
+                    $('#show-block').html(html);
+                }
+            }
+        } else if (index > 0) {
+            if (currentBlock + 1 > BlockC.size) {
+                alert("No existen elementos siguientes");
+            } else {
+                let html = BlockC.GraficaBlockChain(currentBlock + 1);
+                if (html) {
+                    $('#show-block').html(html);
+                }
+            }
+        }
+    }
+}
+
+function GrafiInde() {
+    document.getElementById("Visua2").style.display = "block"
+    if (Alumnos.raiz != null) {
+        let url = 'https://quickchart.io/graphviz?graph=';
+        let body = `digraph G {\n node [shape = record, style=filled,fillcolor=lightpink, penwidth=3];\n  ${usuarioacti.GrafiInde()} }`
+        $("#graph2").attr("src", url + body);
+        console.log(url + body)
+    } else {
+        alert("¡ NO HAY DATOS !")
+    }
+}
+
+function GrafBlocRe() {
+    document.getElementById("Visua3").style.display = "block"
+    if (Alumnos.raiz != null) {
+        let url = 'https://quickchart.io/graphviz?graph=';
+        let body = `digraph G {\n node [shape = record, style=filled,fillcolor=lightpink, penwidth=3];\n  ${BlockC.GrafiBloc() } }`
+        $("#graph3").attr("src", url + body);
+        console.log(url + body)
+    } else {
+        alert("¡ NO HAY DATOS !")
+    }
+}
 
 $(document).ready(VerLocalCargaMasiva);

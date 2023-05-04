@@ -1,32 +1,33 @@
 class NAnode {
-    constructor(NombreFolder) {
+    constructor(NombreFolder, peso) {
         this.NombreFolder = NombreFolder;
         this.files = [];
         this.ArchivosDFold = [];
         this.id = null;
+        this.peso = peso;
     }
 }
 class ArbolIndexado {
     constructor() {
-        this.raiz = new NAnode('/');
+        this.raiz = new NAnode('/', 1);
         this.raiz.id = 0;
         this.size = 1;
     }
 
     InsertarCa(NombreFolder, indice) {
-        let indicenodo = this.ObtFolder(indice);
-        if (indicenodo) {
+        let { node: nodopadre, peso } = this.ObtFolder(indice);
+        if (nodopadre) {
             this.size += 1;
-            let res = indicenodo.ArchivosDFold.find(child => child.NombreFolder == NombreFolder);
+            let res = nodopadre.ArchivosDFold.find(child => child.NombreFolder == NombreFolder);
             if (typeof res == 'undefined' || res == null) {
-                let nuevo = new NAnode(NombreFolder);
+                let nuevo = new NAnode(NombreFolder, peso);
                 nuevo.id = this.size;
-                indicenodo.ArchivosDFold.push(nuevo);
+                nodopadre.ArchivosDFold.push(nuevo);
                 return NombreFolder;
             } else {
-                let nuevoc = new NAnode("Copia " + NombreFolder);
+                let nuevoc = new NAnode("Copia " + NombreFolder, peso);
                 nuevoc.id = this.size;
-                indicenodo.ArchivosDFold.push(nuevoc);
+                nodopadre.ArchivosDFold.push(nuevoc);
                 return "Copia " + NombreFolder;
             }
         } else {
@@ -35,18 +36,20 @@ class ArbolIndexado {
     }
 
     EliminarCar(NombreFolder, indice) {
-        let indicenodo = this.ObtFolder(indice);
+        let { node: indicenodo, peso } = this.ObtFolder(indice);
         if (indicenodo) {
             this.size -= 1;
             indicenodo.ArchivosDFold = indicenodo.ArchivosDFold.filter(child => child.NombreFolder !== NombreFolder);
+            peso--;
         } else {
             alert("No existe esa ruta");
         }
     }
 
     ObtFolder(ruta) {
+        let peso = 2;
         if (ruta == this.raiz.NombreFolder) {
-            return this.raiz;
+            return { node: this.raiz, peso: peso };
         } else {
             let temp = this.raiz;
             let folders = ruta.split('/');
@@ -59,8 +62,9 @@ class ArbolIndexado {
                     return null;
                 }
                 temp = folder;
+                peso++;
             }
-            return temp;
+            return { node: temp, peso: peso };
         }
     }
 
@@ -77,18 +81,17 @@ class ArbolIndexado {
                 let node = queue.shift();
                 nodes += `S_${node.id}[label="${node.NombreFolder}"];\n`;
                 node.ArchivosDFold.forEach(item => {
-                    connections += `S_${node.id} -> S_${item.id};\n`
+                    connections += `S_${node.id} -> S_${item.id} [label="${node.peso}"];\n`
                     queue.push(item);
                 });
             }
         }
-        return 'node[shape="record"];\n' + nodes + '\n' + connections;
+        return '\nlayout=neato; \nedge[dir=none];\n' + nodes + '\n' + connections;
     }
 
     getHTML(ruta) {
-        let node = this.ObtFolder(ruta);
+        let { node } = this.ObtFolder(ruta);
         let code = "";
-        console.log(node.ArchivosDFold)
         node.ArchivosDFold.map(child => {
             code += ` <div class="col-2 folder" onclick="EntrarCarpeta('${child.NombreFolder}')">
                         <img src="../EDD_Proyecto1_Fase2/img/carpeta.png" width="100%"/>
