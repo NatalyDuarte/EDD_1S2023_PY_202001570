@@ -248,6 +248,7 @@ const SubirArchivo = async(e) => {
 function CerrarUsua() {
     localStorage.setItem("Permisos", JSON.stringify(Permisos))
     usuarioacti.ObteLoca(usuarioacti.carnet);
+    //localStorage.setItem("BlockChain", JSON.stringify(JSON.decycle(BlockC)));
     alert("Cerrando Sesion Usuario....")
     document.getElementById("HomePag").style.display = "block";
     document.getElementById("UsuaPag").style.display = "none";
@@ -257,11 +258,12 @@ function CerrarUsua() {
     $("#graph3").attr("src", " ");
     document.getElementById("fileName").value = "";
     document.getElementById("file").value = "";
-    document.getElementById("AreaMensajes").value = "";
+    $('#AreaMensajes').html("");
     document.getElementById("mensajetx").value = "";
     document.getElementById("areadecarp").innerHTML = "";
     document.getElementById("nomcarpeta").value = "";
     document.getElementById("direccarpeta").value = "/";
+    document.getElementById("Visua1").innerHTML = "";
     selpermisos = " ";
     usuarioacti = " ";
     usuarioob = " ";
@@ -295,6 +297,14 @@ function VerLocalCargaMasiva() {
     text += Alumnos.grafEnOrdenLR(Alumnos.raiz)
     text += "</tbody></table>"
     document.getElementById("TablaInOrder").innerHTML = text
+}
+
+function VerLocalBloc() {
+    let temp = JSON.retrocycle(JSON.parse(localStorage.getItem("BlockChain")));
+    BlockC.inicio = temp.inicio
+    BlockC.final = temp.final
+    BlockC.size = temp.size
+    console.log(BlockC.inicio)
 }
 
 function GenePermisos() {
@@ -378,9 +388,10 @@ function GrafBlocRe() {
 }
 
 function GuardarCambios(nombre) {
-    var textarea = document.getElementById(nombre);
-    console.log(textarea)
-    Permisos.EditaTxt(usuarioacti.carnet, nombre, textarea);
+    let id = nombre.id
+    console.log(id.slice(3))
+    console.log(nombre.value)
+    Permisos.EditaTxt(usuarioacti.carnet, id.slice(3), nombre.value);
     alert("Se hicieron los cambios correctamente")
 }
 
@@ -399,4 +410,5 @@ function VerLocalArbolInde() {
 
 $(document).ready(VerLocalCargaMasiva);
 $(document).ready(VerLocalPermisos);
+//$(document).ready(VerLocalBloc);
 //$(document).ready(VerLocalHash);

@@ -83,8 +83,9 @@ class ListaPermisos {
                             } else if (tmp.dato.permisos == "r-w" || tmp.dato.permisos == "w") {
                                 text += '<br><br>'
                                 text += '<h6>Archivo .txt compartido por: ' + tmp.dato.propietario + ' la locacion del archivo es: ' + tmp.dato.ubicacion + ' tipo de permiso: ' + tmp.dato.permisos + ' </h6>'
-                                text += '<textarea  id="' + file.name + '" rows="10" cols="50">' + file.content + '</textarea>';
-                                text += '<a class="btn btn-primary  rounded-pill " onclick="GuardarCambios(' + file.name + ')">Guardar Cambios</a>';
+                                text += '<textarea  id="txt' + file.name + '" rows="10" cols="50">' + file.content + '</textarea>';
+                                let nombre = "txt" + file.name
+                                text += '<a class="btn btn-primary  rounded-pill " onclick="GuardarCambios(' + nombre + ')">Guardar Cambios</a>';
                                 text += '<br><br>'
                             }
 
