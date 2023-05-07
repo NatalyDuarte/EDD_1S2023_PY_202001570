@@ -11,6 +11,7 @@ let permisoscarnet;
 let mensajecarnet;
 let sele = document.getElementById("selCombo").value;
 let BlockC = new BlockChain();
+
 $('#label-in').on('click', function() {
     $('#subiarchi').trigger('click');
 });
@@ -47,18 +48,23 @@ function Login() {
             let selec = Alumnos.grafEnOrdenSelect(Alumnos.raiz);
             $('#selCarnetPer').append(selec);
             $('#selCarnetMen').append(selec);
-            let encontrar = Permisos.Buscar(usuarioacti.carnet)
-            if (encontrar != "No Encontrado") {
-                console.log("Si tiene archivos compartidos")
-            } else {
-
-            }
+            VerLocalArbolInde();
         } else {
             document.getElementById("pass").value = "";
             alert("Contraseña Incorrecta")
         }
-    } else if (respu == null) {
+    } else if (usuarioob == null) {
         alert("CARNET INCORRECTO.")
+    }
+}
+
+function GrafCompartidos() {
+    let encontrar = Permisos.Buscar(usuarioacti.carnet)
+    if (encontrar != "No Encontrado") {
+        let compar = Permisos.BuscarArchivos(usuarioacti.carnet)
+        document.getElementById("Visua1").innerHTML = compar
+    } else {
+        alert("No tiene archivos compartidos")
     }
 }
 
@@ -99,6 +105,23 @@ function CargaTabla() {
     text += Alumnos.graphHash();
     text += "</tbody></table>"
     document.getElementById("TablaUsua").innerHTML = text
+}
+
+function VerLocalHash() {
+    Alumnos.verLocalHash();
+    document.getElementById("TablaUsua").style.display = "block";
+    let text = '<table class="table table-striped"><thead><tr><th scope="col"><center>CARNET</center></th><th scope="col"><center>NOMBRE</center></th><th scope="col"><center>CONTRASEÑA</center></th></tr></thead><tbody>\n'
+    text += Alumnos.graphHash();
+    text += "</tbody></table>"
+    document.getElementById("TablaUsua").innerHTML = text
+}
+
+function VerLocalPermisos() {
+    let temp = localStorage.getItem("Permisos");
+    let temp1 = JSON.parse(temp)
+    Permisos.primero = temp1.primero;
+    Permisos.size = temp1.size;
+    Permisos.files = temp1.files;
 }
 
 function CerrarAdmi() {
@@ -223,6 +246,8 @@ const SubirArchivo = async(e) => {
 }
 
 function CerrarUsua() {
+    localStorage.setItem("Permisos", JSON.stringify(Permisos))
+    usuarioacti.ObteLoca(usuarioacti.carnet);
     alert("Cerrando Sesion Usuario....")
     document.getElementById("HomePag").style.display = "block";
     document.getElementById("UsuaPag").style.display = "none";
@@ -230,14 +255,17 @@ function CerrarUsua() {
     $("#graph1").attr("src", " ");
     $("#graph2").attr("src", " ");
     $("#graph3").attr("src", " ");
-    document.getElementById("fileName").value = " ";
-    document.getElementById("file").value = " ";
-    document.getElementById("fileCarne").value = " ";
-    document.getElementById("AreaMensajes").value = " ";
-    document.getElementById("mensajetx").value = " ";
+    document.getElementById("fileName").value = "";
+    document.getElementById("file").value = "";
+    document.getElementById("AreaMensajes").value = "";
+    document.getElementById("mensajetx").value = "";
+    document.getElementById("areadecarp").innerHTML = "";
+    document.getElementById("nomcarpeta").value = "";
+    document.getElementById("direccarpeta").value = "/";
     selpermisos = " ";
     usuarioacti = " ";
     usuarioob = " ";
+
 }
 
 function ObtenerSelePermisos() {
@@ -349,4 +377,26 @@ function GrafBlocRe() {
     }
 }
 
+function GuardarCambios(nombre) {
+    var textarea = document.getElementById(nombre);
+    console.log(textarea)
+    Permisos.EditaTxt(usuarioacti.carnet, nombre, textarea);
+    alert("Se hicieron los cambios correctamente")
+}
+
+function BorrarLocal() {
+    localStorage.clear()
+}
+
+function VerLocalArbolInde() {
+    let res = usuarioacti.ObteLocalIndeGet(usuarioacti.carnet);
+    if (res == "realizado") {
+        let direccion = document.getElementById("direccarpeta").value;
+        let text1 = usuarioacti.getHTMLInde(direccion);
+        document.getElementById("areadecarp").innerHTML = text1;
+    }
+}
+
 $(document).ready(VerLocalCargaMasiva);
+$(document).ready(VerLocalPermisos);
+//$(document).ready(VerLocalHash);

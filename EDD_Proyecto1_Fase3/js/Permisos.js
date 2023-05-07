@@ -17,21 +17,14 @@ class NodoCi {
 class ListaPermisos {
     constructor() {
         this.primero = null
-        this.ultimo = null
         this.size = 0
         this.files = []
     }
 
     InsertCir(dato) {
         var tmp = new NodoCi(dato)
-        if (this.primero == null) {
-            this.primero = tmp
-            this.ultimo = this.primero
-        } else {
-            this.ultimo.siguiente = tmp
-            this.ultimo = tmp
-            this.ultimo.siguiente = this.primero.siguiente
-        }
+        tmp.siguiente = this.primero
+        this.primero = tmp
         this.size++
     }
 
@@ -72,6 +65,7 @@ class ListaPermisos {
         return "No Encontrado"
     }
     BuscarArchivos(destino) {
+        let text = ""
         var tmp = this.primero
         var count = 0;
         while (count < this.size) {
@@ -81,11 +75,33 @@ class ListaPermisos {
                         let archivo = new Blob([file.content], { type: file.type });
                         const url = URL.createObjectURL(archivo);
                         if (file.name == tmp.dato.archivo) {
-                            text += '<tr><td><center>' + tmp.dato.propietario + '</center></td><td><p style="text-align: justify">' + tmp.dato.destino + '</p></td><td><p style="text-align: justify">' + tmp.dato.ubicacion + '</p></td><td><p style="text-align: justify">' + `<a href="${url}" download>${file.name}</a>` + '</p></td><td><p style="text-align: justify">' + tmp.dato.permisos + '</p></td></tr>\n'
+                            if (tmp.dato.permisos == "r") {
+                                text += '<br><br>'
+                                text += '<h6>Archivo .txt compartido por: ' + tmp.dato.propietario + ' la locacion del archivo es: ' + tmp.dato.ubicacion + ' tipo de permiso: ' + tmp.dato.permisos + ' </h6>'
+                                text += '<textarea  id="' + file.name + '" rows="10" cols="50">' + file.content + '</textarea>';
+                                text += '<br><br>'
+                            } else if (tmp.dato.permisos == "r-w" || tmp.dato.permisos == "w") {
+                                text += '<br><br>'
+                                text += '<h6>Archivo .txt compartido por: ' + tmp.dato.propietario + ' la locacion del archivo es: ' + tmp.dato.ubicacion + ' tipo de permiso: ' + tmp.dato.permisos + ' </h6>'
+                                text += '<textarea  id="' + file.name + '" rows="10" cols="50">' + file.content + '</textarea>';
+                                text += '<a class="btn btn-primary  rounded-pill " onclick="GuardarCambios(' + file.name + ')">Guardar Cambios</a>';
+                                text += '<br><br>'
+                            }
+
+                        }
+                    } else if (file.type == 'application/pdf') {
+                        if (file.name == tmp.dato.archivo) {
+                            text += '<br><br>'
+                            text += '<h6>Archivo pdf compartido por: ' + tmp.dato.propietario + ' la locacion del archivo es: ' + tmp.dato.ubicacion + ' </h6>'
+                            text += '<iframe src ="' + file.content + '" width = "500" height = "300" > </iframe>'
+                            text += '<br><br>'
                         }
                     } else {
                         if (file.name == tmp.dato.archivo) {
-                            text += '<tr><td><center>' + tmp.dato.propietario + '</center></td><td><p style="text-align: justify">' + tmp.dato.destino + '</p></td><td><p style="text-align: justify">' + tmp.dato.ubicacion + '</p></td><td><p style="text-align: justify">' + `<a href="${file.content}" download>${file.name}</a>` + '</p></td><td><p style="text-align: justify">' + tmp.dato.permisos + '</p></td></tr>\n'
+                            text += '<br><br>'
+                            text += '<h6>Archivo imagen compartido por: ' + tmp.dato.propietario + ' la locacion del archivo es: ' + tmp.dato.ubicacion + ' </h6>'
+                            text += '<img src="' + file.content + '" width="500" height="300" >'
+                            text += '<br><br>'
                         }
                     }
                 })
@@ -93,7 +109,29 @@ class ListaPermisos {
             tmp = tmp.siguiente
             count++
         }
-        return "No Encontrado"
+        return text;
+    }
+
+    EditaTxt(destino, nombrearchivo, contenido) {
+        let text = ""
+        var tmp = this.primero
+        var count = 0;
+        while (count < this.size) {
+            if (tmp.dato.destino == destino) {
+                this.files.map(file => {
+                    if (file.type === 'text/plain') {
+                        let archivo = new Blob([file.content], { type: file.type });
+                        const url = URL.createObjectURL(archivo);
+                        if (file.name == nombrearchivo) {
+                            file.content = contenido;
+                        }
+                    }
+                })
+            }
+            tmp = tmp.siguiente
+            count++
+        }
+        return text;
     }
 
 }

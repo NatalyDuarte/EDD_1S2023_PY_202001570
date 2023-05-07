@@ -22,9 +22,6 @@ class Usuaob {
     GrafiInde() {
         return this.arbolinde.Graficar();
     }
-    ObteLocalInde() {
-        return this.arbolinde;
-    }
     ObteLocalIndeGet(usuario) {
         let nombre = "ArbolInde" + usuario;
         let temp = localStorage.getItem(nombre);
@@ -67,5 +64,9 @@ class Usuaob {
 
             })
         }
+    }
+    ObteLoca(carnet) {
+        let nombre = "ArbolInde" + carnet;
+        localStorage.setItem(nombre, JSON.stringify(this.arbolinde));
     }
 }

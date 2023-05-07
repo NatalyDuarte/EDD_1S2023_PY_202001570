@@ -5,11 +5,9 @@ let Hash = new TableHash();
 class nodoAVL {
     constructor(dato) {
         this.dato = dato;
-        //this.ArbolInde = new ArbolIndexado();
         this.fe = 0;
         this.izquierda = null;
         this.derecha = null;
-
     }
 }
 class ArbolAVL {
@@ -144,8 +142,12 @@ class ArbolAVL {
         if (Nodo == null) return "";
         this.EnOrdenHash(Nodo.izquierda);
         Hash.insertar(Nodo.dato.carnet, Nodo.dato.nombre, CryptoJS.SHA256(Nodo.dato.password).toString(), Nodo.dato.carpeta_raiz)
-        Nodo.dato.nombre + '</p></td></tr>\n'
+            //localStorage.setItem("Hash", JSON.stringify(Hash))
         this.EnOrdenHash(Nodo.derecha);
+    }
+    verLocalHash() {
+        let temp = localStorage.getItem("Hash")
+        Hash.table = JSON.parse(temp).table;
     }
     graphHash() {
         let text = ""
